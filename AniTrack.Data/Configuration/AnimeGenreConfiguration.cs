@@ -19,6 +19,13 @@ namespace AniTrack.Data.Configuration
                 .HasOne(ag => ag.Genre)
                 .WithMany(g => g.AnimesGenre)
                 .HasForeignKey(ag => ag.GenreId);
+            entity
+                .Property(ag => ag.IsDeleted)
+                .HasDefaultValue(false);
+            entity
+               .HasQueryFilter(cm => cm.IsDeleted == false &&
+                                               cm.Anime.IsDeleted == false &&
+                                               cm.Genre.IsDeleted == false);
         }
     }
 }

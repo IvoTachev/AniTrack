@@ -44,6 +44,9 @@ namespace AniTrack.Data.Configuration
                 .IsRequired()
                 .HasDefaultValue(false);
 
+            entity
+                .HasQueryFilter(g => g.IsDeleted == false);
+
             // public List<Anime> SeedAnimes()
             // {
             //    List<Anime> animes = new List<Anime>()
@@ -52,7 +55,7 @@ namespace AniTrack.Data.Configuration
             //        {
             //            Id = 1,
             //            Title = "Naruto",
-    
+
             //            ImageUrl = "https://m.media-amazon.com/images/M/MV5BMTI1NDMyMjExOF5BMl5BanBnXkFtZTcwOTc4MjQzMQ@@._V1_.jpg"
             //        },
             //};

@@ -5,5 +5,6 @@
         public int Id { get; set; }
         public string Name { get; set; }
         public ICollection<AnimeGenre> AnimesGenre { get; set; } = new List<AnimeGenre>();
+        public bool IsDeleted { get; set; }
     }
 }

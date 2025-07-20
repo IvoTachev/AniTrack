@@ -6,5 +6,6 @@
         public Anime Anime { get; set; } = null!;
         public int GenreId { get; set; }
         public Genre Genre { get; set; } = null!;
+        public bool IsDeleted { get; set; }
     }
 }
