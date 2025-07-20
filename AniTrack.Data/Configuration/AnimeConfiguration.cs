@@ -43,6 +43,20 @@ namespace AniTrack.Data.Configuration
                 .Property(a => a.IsDeleted)
                 .IsRequired()
                 .HasDefaultValue(false);
+
+            // public List<Anime> SeedAnimes()
+            // {
+            //    List<Anime> animes = new List<Anime>()
+            //    {
+            //        new Anime()
+            //        {
+            //            Id = 1,
+            //            Title = "Naruto",
+    
+            //            ImageUrl = "https://m.media-amazon.com/images/M/MV5BMTI1NDMyMjExOF5BMl5BanBnXkFtZTcwOTc4MjQzMQ@@._V1_.jpg"
+            //        },
+            //};
+            //return animes;
         }
     }
 }

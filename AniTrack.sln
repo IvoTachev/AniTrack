@@ -23,9 +23,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AniTrack.Data.Models", "Ani
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AniTrack.Web.ViewModels", "AniTrack.Web.ViewModels\AniTrack.Web.ViewModels.csproj", "{C9D77A74-05B7-4F4F-BB89-E20CBAB4780F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreArchTemplate.Services.Core", "..\FinalProject\AspNetCoreArchTemplate.Services.Core\AspNetCoreArchTemplate.Services.Core.csproj", "{792EA05D-7117-D10C-09FD-FAB2CE27DDE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AniTrack.Services.Core", "AniTrack.Services.Core\AniTrack.Services.Core.csproj", "{A16D74F9-3EE7-22F8-1930-AFF308E9F610}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspNetCoreArchTemplate.Services.Common", "..\FinalProject\AspNetCoreArchTemplate.Services.Common\AspNetCoreArchTemplate.Services.Common.csproj", "{89219375-5771-C1F6-EA42-C253CA662450}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AniTrack.Services.Common", "AniTrack.Services.Common\AniTrack.Services.Common.csproj", "{D3338A7F-DF0E-6A46-2170-A81A5686E596}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,14 +57,14 @@ Global
 		{C9D77A74-05B7-4F4F-BB89-E20CBAB4780F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C9D77A74-05B7-4F4F-BB89-E20CBAB4780F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C9D77A74-05B7-4F4F-BB89-E20CBAB4780F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{792EA05D-7117-D10C-09FD-FAB2CE27DDE9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{792EA05D-7117-D10C-09FD-FAB2CE27DDE9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{792EA05D-7117-D10C-09FD-FAB2CE27DDE9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{792EA05D-7117-D10C-09FD-FAB2CE27DDE9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{89219375-5771-C1F6-EA42-C253CA662450}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{89219375-5771-C1F6-EA42-C253CA662450}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{89219375-5771-C1F6-EA42-C253CA662450}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{89219375-5771-C1F6-EA42-C253CA662450}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A16D74F9-3EE7-22F8-1930-AFF308E9F610}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A16D74F9-3EE7-22F8-1930-AFF308E9F610}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A16D74F9-3EE7-22F8-1930-AFF308E9F610}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A16D74F9-3EE7-22F8-1930-AFF308E9F610}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D3338A7F-DF0E-6A46-2170-A81A5686E596}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D3338A7F-DF0E-6A46-2170-A81A5686E596}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D3338A7F-DF0E-6A46-2170-A81A5686E596}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D3338A7F-DF0E-6A46-2170-A81A5686E596}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,8 +75,8 @@ Global
 		{E6111C96-2B3A-47DA-9C81-9F3EE95B714B} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{E3D1A47D-9414-4ED3-8F00-0AE89D29A8F8} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
 		{C9D77A74-05B7-4F4F-BB89-E20CBAB4780F} = {E9F39ADB-1A77-4205-8E24-7396BC55CF78}
-		{792EA05D-7117-D10C-09FD-FAB2CE27DDE9} = {C8347219-1C67-45B6-BD1E-00FD5DDFF94C}
-		{89219375-5771-C1F6-EA42-C253CA662450} = {C8347219-1C67-45B6-BD1E-00FD5DDFF94C}
+		{A16D74F9-3EE7-22F8-1930-AFF308E9F610} = {C8347219-1C67-45B6-BD1E-00FD5DDFF94C}
+		{D3338A7F-DF0E-6A46-2170-A81A5686E596} = {C8347219-1C67-45B6-BD1E-00FD5DDFF94C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E01D5365-332F-4A49-8820-58BFB761EB89}

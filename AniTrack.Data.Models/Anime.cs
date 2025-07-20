@@ -22,6 +22,6 @@
         [Comment("Indicates whether the anime series is deleted")]
         public bool IsDeleted { get; set; }
 
-        //TODO : Add Genres colection
+        public ICollection<AnimeGenre> AnimeGenres { get; set; } = new List<AnimeGenre>();
     }
 }

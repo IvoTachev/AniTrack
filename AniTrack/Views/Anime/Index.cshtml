@@ -1,5 +1,14 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using AniTrack.Web.ViewModels.Anime
+@model IEnumerable<TopAnimesViewModel>
 @{
+    ViewData["Title"] = "Top Animes";
 }
+
+<h2>Top Animes</h2>
+<div style="display:flex; flex-wrap: wrap;">
+    @foreach (var Anime in Model)
+    {
+        <a href="/Anime/Details/@Anime.Id" style="width:250px; height:500px; background-image:url('@Anime.ImageUrl'); background-size:cover; font-size:40px; text-shadow: 3px 3px 4px #000000;">@Anime.Title</a>
+    }
+    <a href="/Anime/New" style="width:250px; height:500px;font-size:100px; display: flex; justify-content:center; align-items: center; background-color:gray;">+</a>
+</div>

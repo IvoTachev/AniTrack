@@ -1,11 +1,11 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using AniTrack.Data;
 namespace AniTrack.Web
 {
+    using AniTrack.Services.Core;
+    using AniTrack.Services.Core.Interfaces;
     using Data;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -38,6 +38,9 @@ namespace AniTrack.Web
                     options.Password.RequiredUniqueChars = 0;
                 })
                 .AddEntityFrameworkStores<AniTrackDbContext>();
+
+          
+            builder.Services.AddScoped<IAnimeService, AnimeService>();
 
             builder.Services.AddControllersWithViews();
 
