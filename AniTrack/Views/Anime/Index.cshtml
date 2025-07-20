@@ -5,10 +5,47 @@
 }
 
 <h2>Top Animes</h2>
-<div style="display:flex; flex-wrap: wrap;">
+<div class="anime-grid">
     @foreach (var Anime in Model)
     {
-        <a href="/Anime/Details/@Anime.Id" style="width:250px; height:500px; background-image:url('@Anime.ImageUrl'); background-size:cover; font-size:40px; text-shadow: 3px 3px 4px #000000;">@Anime.Title</a>
+        <div class="anime-card">
+            <div class="anime-title">@Anime.Title</div>
+            <a href="/Anime/Details/@Anime.Id">
+                <img src="@Anime.ImageUrl" alt="@Anime.Title" class="anime-image" />
+            </a>
+        </div>
     }
-    <a href="/Anime/New" style="width:250px; height:500px;font-size:100px; display: flex; justify-content:center; align-items: center; background-color:gray;">+</a>
 </div>
+
+<style>
+    .anime-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 32px 24px; /* vertical and horizontal spacing between cards */
+        justify-content: flex-start;
+    }
+
+    .anime-card {
+        width: 220px;
+        margin-bottom: 32px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .anime-title {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 8px;
+        text-align: center;
+        color: #258cfb;
+    }
+
+    .anime-image {
+        width: 100%;
+        height: 320px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+</style>

@@ -19,4 +19,31 @@ html {
 
 body {
   margin-bottom: 60px;
+  background-image: url('/images/NierautomataWallpaper.png');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  color: #258cfb;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #258cfb;
+}
+
+.ani-blue {
+       color: #258cfb;
+   }
+
+footer,
+footer.text-muted,
+footer .container,
+footer a,
+footer a:visited {
+    color: #258cfb !important;
+}
+
+footer a:hover,
+footer a:focus {
+    color: #1565c0 !important;
 }
