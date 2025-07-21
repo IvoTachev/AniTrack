@@ -2,6 +2,6 @@
 {
     public static class ApplicationConstants
     {
-        public const string ApplicationDateFormat = "dd-MM-yyyy";
+        public const string ApplicationDateFormat = "yyyy-MM-dd";
     }
 }
