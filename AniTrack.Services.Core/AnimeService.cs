@@ -58,6 +58,40 @@
 
             await this.dbContext.SaveChangesAsync();
         }
+
+        public async Task<AnimeDetailsViewModel?> GetAnimeDetailsAsync(string? id)
+        {
+            AnimeDetailsViewModel? animeDetails = null;
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (isIdValid)
+            {
+                animeDetails = await this.dbContext
+                    .Animes
+                    .AsNoTracking()
+                    .Where(a => a.Id == animeId)
+                    .Select(a => new AnimeDetailsViewModel()
+                    {
+                        Id = a.Id.ToString(),
+                        Title = a.Title,
+                        AirDate = a.AirDate.ToString(ApplicationDateFormat),
+                        EndDate = a.EndDate.HasValue
+                                            ? a.EndDate.Value.ToString(ApplicationDateFormat)
+                                            : "???",
+                        Synopsis = a.Synopsis,
+                        ImageUrl = a.ImageUrl,
+                        Episodes = a.Episodes,
+                        Genres = a.AnimeGenres
+                                  .Select(ag => new Genre
+                                  {
+                                      Id = ag.GenreId,
+                                      Name = ag.Genre.Name
+                                  })
+                                  .ToList()
+                    })
+                    .SingleOrDefaultAsync();
+            }
+            return animeDetails;
+        }
     }
    
 }

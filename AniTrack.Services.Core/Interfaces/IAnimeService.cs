@@ -7,5 +7,7 @@
         Task<IEnumerable<TopAnimesViewModel>> GetTopAnimesAsync();
 
         Task AddAnimeAsync(AddAnimeFormModel inputModel);
+
+        Task<AnimeDetailsViewModel?> GetAnimeDetailsAsync(string? id);
     }
 }

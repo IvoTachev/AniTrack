@@ -18,13 +18,13 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
-  background-image: url('/images/NierautomataWallpaper.png');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-  color: #258cfb;
+    margin-bottom: 60px;
+    background-image: url('/images/GojoWallpaper.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    color: #258cfb;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -46,4 +46,10 @@ footer a:visited {
 footer a:hover,
 footer a:focus {
     color: #1565c0 !important;
+}
+
+.details-bg {
+    background: #000 !important;
+    background-image: none !important;
+    min-height: 100vh;
 }
