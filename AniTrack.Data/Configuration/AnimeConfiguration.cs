@@ -9,22 +9,23 @@ namespace AniTrack.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Anime> entity)
         {
+            // Setting the primary key
             entity
                 .HasKey(a => a.Id);
-
+            // Setting constraints for Title, Episodes, AirDate, EndDate, Synopsis, ImageUrl
             entity
                 .Property(a => a.Title)
                 .IsRequired()
                 .HasMaxLength(TitleMaxLength);
-
+        
             entity
                 .Property(a => a.Episodes)
                 .IsRequired();
-
+         
             entity
                 .Property(a => a.AirDate)
                 .IsRequired();
-
+              
             entity
                 .Property(a => a.EndDate)
                 .IsRequired(false);
@@ -43,10 +44,10 @@ namespace AniTrack.Data.Configuration
                 .Property(a => a.IsDeleted)
                 .IsRequired()
                 .HasDefaultValue(false);
-
+            // Filtering out deleted entities
             entity
                 .HasQueryFilter(g => g.IsDeleted == false);
-
+            // Seeding initial data
             entity.HasData(this.SeedAnimes());
         }
              public List<Anime> SeedAnimes()

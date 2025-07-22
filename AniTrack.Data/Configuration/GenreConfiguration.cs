@@ -9,20 +9,22 @@ namespace AniTrack.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<Genre> entity)
         {
+            // Setting up the primary key for the Genre
             entity
                 .HasKey(g => g.Id);
+            // Setting restraints on the Name property
             entity
                 .Property(g => g.Name)
                 .IsRequired()
                 .HasMaxLength(GenreNameMaxLength);
-
+            // Seeding initial data for genres
             entity.HasData(SeedGenre());
-
+            // Setting up the IsDeleted property for soft deletion
             entity
                 .Property(g => g.IsDeleted)
                 .IsRequired()
                 .HasDefaultValue(false);
-
+            // Apply global query filter to exclude soft-deleted records
             entity
                 .HasQueryFilter(g => g.IsDeleted == false);
         }

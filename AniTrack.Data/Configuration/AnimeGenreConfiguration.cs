@@ -9,6 +9,7 @@ namespace AniTrack.Data.Configuration
     {
         public void Configure(EntityTypeBuilder<AnimeGenre> entity)
         {
+            // Setting up the primary key and relationships
             entity
                 .HasKey(ag => new { ag.AnimeId, ag.GenreId });
             entity
@@ -22,10 +23,12 @@ namespace AniTrack.Data.Configuration
             entity
                 .Property(ag => ag.IsDeleted)
                 .HasDefaultValue(false);
+            // Apply global query filter to exclude soft-deleted records
             entity
                .HasQueryFilter(cm => cm.IsDeleted == false &&
                                                cm.Anime.IsDeleted == false &&
                                                cm.Genre.IsDeleted == false);
+            // Seed initial data
             entity.HasData(this.SeedAnimeGenre());
         }
         public List<AnimeGenre> SeedAnimeGenre()
