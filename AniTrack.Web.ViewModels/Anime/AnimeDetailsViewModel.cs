@@ -1,12 +1,6 @@
-﻿using AniTrack.Data.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AniTrack.Web.ViewModels.Anime
+﻿namespace AniTrack.Web.ViewModels.Anime
 {
+    using AniTrack.Data.Models;
     public class AnimeDetailsViewModel
     {
         public string Id { get; set; } = null!;
@@ -17,8 +11,5 @@ namespace AniTrack.Web.ViewModels.Anime
         public string ImageUrl { get; set; } = null!;
         public int Episodes { get; set; }
         public List<Genre>? Genres { get; set; }
-
-
-
     }
 }

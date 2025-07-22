@@ -4,12 +4,13 @@
     using static AniTrack.Web.ViewModels.ValidationMessages.Anime;
     using static Common.EntityConstants.Anime;
     using System.Collections.Generic;
+    using AniTrack.Data.Models;
 
-    public class AddAnimeFormModel  
+    public class EditAnimeFormModel
     {
-        // Id is an unique index in the database, so it is not required to be set by the user.
-        public string Id { get; set; }
-            = string.Empty;
+        // Id is required for the form to be submitted correctly.
+        // It is not required to be set by the user, as it is set by the database.
+        public string Id { get; set; } = null!;
 
         [Required(ErrorMessage = TitleRequiredMessage)]
         [MaxLength(TitleMaxLength, ErrorMessage = TitleMaxLengthMessage)]
@@ -20,6 +21,8 @@
         [Range(EpisodesMin, EpisodesMax, ErrorMessage = EpisodesRangeMessage)]
         public int Episodes { get; set; }
 
+        // This property is used to display the genres in the edit form.
+        // The user chooses from a checklist, no need of validation here.
         public List<int> SelectedGenreIds { get; set; } = new List<int>();
 
         [Required(ErrorMessage = AirDateRequiredMessage)]

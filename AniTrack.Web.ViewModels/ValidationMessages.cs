@@ -1,6 +1,4 @@
-﻿
-
-using AniTrack.Web.ViewModels.Anime;
+﻿using AniTrack.Web.ViewModels.Anime;
 using System.ComponentModel.DataAnnotations;
 
 namespace AniTrack.Web.ViewModels
@@ -29,12 +27,21 @@ namespace AniTrack.Web.ViewModels
             {
                 protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
                 {
-                    var model = (AddAnimeFormModel)validationContext.ObjectInstance;
-                    if (string.IsNullOrWhiteSpace(model.EndDate))
+                    var type = validationContext.ObjectInstance.GetType();
+                    var airDateProp = type.GetProperty("AirDate");
+                    var endDateProp = type.GetProperty("EndDate");
+
+                    if (airDateProp == null || endDateProp == null)
+                        return ValidationResult.Success; // Properties not found, skip validation
+
+                    var airDateStr = airDateProp.GetValue(validationContext.ObjectInstance) as string;
+                    var endDateStr = endDateProp.GetValue(validationContext.ObjectInstance) as string;
+
+                    if (string.IsNullOrWhiteSpace(endDateStr))
                         return ValidationResult.Success; // Allow null/empty EndDate
 
-                    if (DateTime.TryParse(model.AirDate, out var airDate) &&
-                        DateTime.TryParse(model.EndDate, out var endDate))
+                    if (DateTime.TryParse(airDateStr, out var airDate) &&
+                        DateTime.TryParse(endDateStr, out var endDate))
                     {
                         if (endDate < airDate)
                         {

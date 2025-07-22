@@ -9,5 +9,9 @@
         Task AddAnimeAsync(AddAnimeFormModel inputModel);
 
         Task<AnimeDetailsViewModel?> GetAnimeDetailsAsync(string? id);
+
+        Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? slug);
+
+        Task<bool> EditAnimeAsync(EditAnimeFormModel inputModel);
     }
 }

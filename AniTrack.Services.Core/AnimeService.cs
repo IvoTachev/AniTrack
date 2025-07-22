@@ -92,6 +92,102 @@
             }
             return animeDetails;
         }
+
+        public async Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? id)
+        {
+            EditAnimeFormModel? animeDetails = null; 
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (isIdValid)
+            {
+                animeDetails = await this.dbContext
+                    .Animes
+                    .AsNoTracking()
+                    .Where(a => a.Id == animeId)
+                    .Select(a => new EditAnimeFormModel()
+                    {
+                        Id = a.Id.ToString(),
+                        Title = a.Title,
+                        AirDate = a.AirDate.ToString(ApplicationDateFormat),
+                        EndDate = a.EndDate.HasValue
+                                            ? a.EndDate.Value.ToString(ApplicationDateFormat)
+                                            : null,
+                        Synopsis = a.Synopsis,
+                        ImageUrl = a.ImageUrl,
+                        Episodes = a.Episodes,
+                        SelectedGenreIds = a.AnimeGenres
+                                  .Select(ag => ag.GenreId)
+                                  .ToList()
+                    })
+                    .SingleOrDefaultAsync();
+            }
+            return animeDetails;
+        }
+
+        public async Task<bool> EditAnimeAsync(EditAnimeFormModel inputModel)
+        {
+            // Validate the input model
+            if (!int.TryParse(inputModel.Id, out int animeId))
+            {
+                return false;
+            }
+            // Fetch the anime to edit, including its genres
+            Anime? editableAnime = await this.dbContext
+                .Animes
+                .Include(a => a.AnimeGenres)
+                .SingleOrDefaultAsync(a => a.Id == animeId);
+            // If the anime does not exist, return false
+            if (editableAnime == null)
+            {
+                return false;
+            }
+            // Update main properties
+            editableAnime.Title = inputModel.Title;
+            editableAnime.Episodes = inputModel.Episodes;
+            editableAnime.AirDate = DateOnly.ParseExact(inputModel.AirDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            editableAnime.EndDate = string.IsNullOrEmpty(inputModel.EndDate)
+                ? null
+                : DateOnly.ParseExact(inputModel.EndDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None);
+            editableAnime.Synopsis = inputModel.Synopsis;
+            editableAnime.ImageUrl = inputModel.ImageUrl;
+
+            // Get all AnimeGenre entries for this anime, including deleted ones
+            var allGenres = await this.dbContext.AnimesGenres
+                .IgnoreQueryFilters()
+                .Where(ag => ag.AnimeId == animeId)
+                .ToListAsync();
+
+            // Mark genres as deleted if not in selected
+            foreach (var ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
+            {
+                ag.IsDeleted = true;
+            }
+
+            // For each selected genre, add or undelete as needed
+            foreach (var genreId in inputModel.SelectedGenreIds)
+            {
+                var ag = allGenres.FirstOrDefault(x => x.GenreId == genreId);
+                if (ag == null)
+                {
+                    // Create new AnimeGenre
+                    var newAnimeGenre = new AnimeGenre
+                    {
+                        AnimeId = animeId,
+                        GenreId = genreId,
+                        IsDeleted = false
+                    };
+                    await this.dbContext.AnimesGenres.AddAsync(newAnimeGenre);
+                }
+                else if (ag.IsDeleted)
+                {
+                    // Undelete existing AnimeGenre
+                    ag.IsDeleted = false;
+                }
+                // else: already present and not deleted, do nothing
+            }
+
+            await this.dbContext.SaveChangesAsync();
+            return true;
+        }
     }
    
 }

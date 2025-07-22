@@ -1,0 +1,100 @@
+﻿@using static AniTrack.GCommon.ApplicationConstants
+@model AniTrack.Web.ViewModels.Anime.EditAnimeFormModel
+
+@{
+    ViewData["Title"] = "Edit Anime";
+
+    bool airDateExist = DateOnly.TryParse(Model?.AirDate, out DateOnly airDate);
+    string airDateString = airDateExist ? airDate.ToString(ApplicationDateFormat) : string.Empty;
+    bool endDateExist = DateOnly.TryParse(Model?.EndDate, out DateOnly endDate);
+    string endDateString = endDateExist ? endDate.ToString(ApplicationDateFormat) : string.Empty;
+}
+
+<form method="post">
+    <fieldset>
+        <legend>Edit Anime</legend>
+
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label asp-for="Title" class="form-label"></label>
+            <input asp-for="Title" class="form-control" type="text" placeholder="Enter the Anime Title" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Episodes" class="form-label"></label>
+            <input asp-for="Episodes" class="form-control" type="number" placeholder="Enter the number of Episodes" />
+            <span asp-validation-for="Episodes" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="AirDate" class="form-label"></label>
+            <input asp-for="AirDate" class="form-control" type="date"/>
+            <span asp-validation-for="AirDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="EndDate" class="form-label"></label>
+            <input asp-for="EndDate" class="form-control" type="date"/>
+            <span asp-validation-for="EndDate" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Synopsis" class="form-label"></label>
+            <textarea asp-for="Synopsis" class="form-control" placeholder="Enter the Anime Synopsis" rows="3"></textarea>
+            <span asp-validation-for="Synopsis" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ImageUrl" class="form-label"></label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="Enter the anime poster URL" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Genres</label>
+            <div>
+                @{
+                    var genreList = new List<(int Id, string Name)>
+                    {
+                        (1, "Action"),
+                        (2, "Adventure"),
+                        (3, "Avant Garde"),
+                        (4, "Award Winning"),
+                        (5, "Boys Love"),
+                        (6, "Comedy"),
+                        (7, "Drama"),
+                        (8, "Fantasy"),
+                        (9, "Girls Love"),
+                        (10, "Gourmet"),
+                        (11, "Horror"),
+                        (12, "Mystery"),
+                        (13, "Romance"),
+                        (14, "Sci-fi"),
+                        (15, "Slice of Life"),
+                        (16, "Sports"),
+                        (17, "Supernatural"),
+                        (18, "Suspense")
+                    };
+                }
+                @foreach (var genre in genreList)
+                {
+                    bool isChecked = Model.SelectedGenreIds != null && Model.SelectedGenreIds.Contains(genre.Id);
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="@genre.Id"
+                               @(isChecked ? "checked" : "") />
+                        <label class="form-check-label">@genre.Name</label>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+        <a class="btn btn-primary ms-2" asp-controller="Anime" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+    </fieldset>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
