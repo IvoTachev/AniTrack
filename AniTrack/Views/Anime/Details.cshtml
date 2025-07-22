@@ -40,7 +40,10 @@
         <h1 style="margin-top: 0; color: #fff;">@Model.Title</h1>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0;">Synopsis</h2>
-            <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>
+            <div>
+                <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>
+                <a class="btn btn-danger ms-2" asp-controller="Anime" asp-action="Delete" asp-route-id="@Model.Id">Delete Anime</a>
+            </div>
         </div>
         <div style="padding: 1rem; border-radius: 6px; border: 1.5px solid #bbb;">
             @Html.Raw(Model.Synopsis?.Replace("\n", "<br />"))

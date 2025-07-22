@@ -13,5 +13,10 @@
         Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? slug);
 
         Task<bool> EditAnimeAsync(EditAnimeFormModel inputModel);
+
+        Task<DeleteAnimeViewModel?> GetAnimeDetailsForDeleteByIdAsync(string? id);
+        Task<bool> SoftDeleteAnimeAsync(string? id);
+
+        Task<bool> HardDeleteAnimeAsync(string? id);
     }
 }

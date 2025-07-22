@@ -120,5 +120,53 @@
                 return this.RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Delete(string? id)
+        {
+            try
+            {
+                DeleteAnimeViewModel? animeDetails = await this.animeService.GetAnimeDetailsForDeleteByIdAsync(id);
+                if (animeDetails == null)
+                {
+                    //TODO: Add a not found view
+                    return this.RedirectToAction(nameof(Index));
+                }
+                return this.View(animeDetails);
+            }
+            catch (Exception e)
+            {
+                //Todo: Log the error
+                Console.WriteLine(e.Message);
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(AnimeDetailsViewModel inputModel)
+        {
+            try
+            {
+                if(!this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                bool deleteResult = await this.animeService.SoftDeleteAnimeAsync(inputModel.Id);
+                if (!deleteResult)
+                {
+                    //TODO: Add a notification for unsuccessful deletion
+                    return this.RedirectToAction(nameof(Index));
+                }
+                //TODO: Add a notification for successful deletion
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log the error
+                Console.WriteLine(ex.Message);
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

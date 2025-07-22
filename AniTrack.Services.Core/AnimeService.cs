@@ -46,9 +46,9 @@
             await this.dbContext.SaveChangesAsync();
 
             // Add AnimeGenre entries for each selected genre
-            foreach (var genreId in inputModel.SelectedGenreIds)
+            foreach (int genreId in inputModel.SelectedGenreIds)
             {
-                var animeGenre = new AnimeGenre
+                AnimeGenre animeGenre = new AnimeGenre
                 {
                     AnimeId = newAnime.Id,
                     GenreId = genreId
@@ -151,25 +151,24 @@
             editableAnime.ImageUrl = inputModel.ImageUrl;
 
             // Get all AnimeGenre entries for this anime, including deleted ones
-            var allGenres = await this.dbContext.AnimesGenres
+            List<AnimeGenre> allGenres = await this.dbContext.AnimesGenres
                 .IgnoreQueryFilters()
                 .Where(ag => ag.AnimeId == animeId)
                 .ToListAsync();
 
             // Mark genres as deleted if not in selected
-            foreach (var ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
+            foreach (AnimeGenre ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
             {
                 ag.IsDeleted = true;
             }
 
             // For each selected genre, add or undelete as needed
-            foreach (var genreId in inputModel.SelectedGenreIds)
+            foreach (int genreId in inputModel.SelectedGenreIds)
             {
-                var ag = allGenres.FirstOrDefault(x => x.GenreId == genreId);
+                AnimeGenre? ag = allGenres.FirstOrDefault(x => x.GenreId == genreId);
                 if (ag == null)
                 {
-                    // Create new AnimeGenre
-                    var newAnimeGenre = new AnimeGenre
+                    AnimeGenre newAnimeGenre = new AnimeGenre
                     {
                         AnimeId = animeId,
                         GenreId = genreId,
@@ -179,7 +178,6 @@
                 }
                 else if (ag.IsDeleted)
                 {
-                    // Undelete existing AnimeGenre
                     ag.IsDeleted = false;
                 }
                 // else: already present and not deleted, do nothing
@@ -188,6 +186,92 @@
             await this.dbContext.SaveChangesAsync();
             return true;
         }
+
+        public async Task<DeleteAnimeViewModel?> GetAnimeDetailsForDeleteByIdAsync(string? id)
+        {
+            DeleteAnimeViewModel? animeDetails = null;
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (isIdValid)
+            {
+                animeDetails = await this.dbContext
+                    .Animes
+                    .AsNoTracking()
+                    .Where(a => a.Id == animeId)
+                    .Select(a => new DeleteAnimeViewModel()
+                    {
+                        Id = a.Id.ToString(),
+                        Title = a.Title,
+                        ImageUrl = a.ImageUrl
+                    })
+                    .SingleOrDefaultAsync();
+            }
+            return animeDetails;
+        }
+        public async Task<bool> SoftDeleteAnimeAsync(string? id)
+        {
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if(!isIdValid)
+            {
+                return false;
+            }
+
+            Anime? animeForDelete = await this.dbContext
+                .Animes
+                .FindAsync(animeId);
+
+            if(animeForDelete == null)
+            {
+                return false;
+            }
+
+            // Soft delete the anime by marking it as deleted
+            animeForDelete.IsDeleted = true;
+
+            // Soft delete related AnimeGenre entries
+            List<AnimeGenre> relatedGenres = await this.dbContext.AnimesGenres
+                .Where(ag => ag.AnimeId == animeId && !ag.IsDeleted)
+                .ToListAsync();
+
+            foreach (AnimeGenre ag in relatedGenres)
+            {
+                ag.IsDeleted = true;
+            }
+
+            await this.dbContext.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> HardDeleteAnimeAsync(string? id)
+        {
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (!isIdValid)
+            {
+                return false;
+            }
+
+            Anime? animeForDelete = await this.dbContext
+                .Animes
+                .FindAsync(animeId);
+
+            if (animeForDelete == null)
+            {
+                return false;
+            }
+
+            // Remove all related AnimeGenre entries (including soft-deleted)
+            List<AnimeGenre> relatedGenres = await this.dbContext.AnimesGenres
+                .IgnoreQueryFilters()
+                .Where(ag => ag.AnimeId == animeId)
+                .ToListAsync();
+
+            this.dbContext.AnimesGenres.RemoveRange(relatedGenres);
+
+            // Remove the anime itself
+            this.dbContext.Animes.Remove(animeForDelete);
+
+            await this.dbContext.SaveChangesAsync();
+
+            return true;
+        }
     }
-   
 }
