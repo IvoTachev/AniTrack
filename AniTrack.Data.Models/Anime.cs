@@ -23,5 +23,7 @@
         public bool IsDeleted { get; set; }
 
         public ICollection<AnimeGenre> AnimeGenres { get; set; } = new List<AnimeGenre>();
+
+        public virtual ICollection<UserAnime> UserWatchlists { get; set; } = new List<UserAnime>();
     }
 }

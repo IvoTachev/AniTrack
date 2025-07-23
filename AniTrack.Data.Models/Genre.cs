@@ -2,6 +2,7 @@
 
 namespace AniTrack.Data.Models
 {
+    [Comment("Represents a Genre in the AniTrack database.")]
     public class Genre
     {
         [Comment("The unique identifier for the Genre.")]

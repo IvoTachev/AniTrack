@@ -2,6 +2,7 @@
 
 namespace AniTrack.Data.Models
 {
+    [Comment("Represents the relationship between Anime and Genre in the AniTrack database.")]
     public class AnimeGenre
     {
         [Comment("The unique identifier for the Anime associated with this Genre.")]
