@@ -12,10 +12,20 @@
 
         @if (User.Identity?.IsAuthenticated == true)
         {
-            <form asp-controller="Animelist" asp-action="Add" method="post" style="margin-bottom: 1rem;">
-                <input type="hidden" name="animeId" value="@Model.Id" />
-                <button type="submit" class="btn btn-success">Add to my Animelist</button>
-            </form>
+            if (ViewBag.IsInAnimelist == true)
+            {
+                <form asp-controller="Animelist" asp-action="Remove" method="post" style="margin-bottom: 1rem;">
+                    <input type="hidden" name="animeId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-danger">Remove from my Animelist</button>
+                </form>
+            }
+            else
+            {
+                <form asp-controller="Animelist" asp-action="Add" method="post" style="margin-bottom: 1rem;">
+                    <input type="hidden" name="animeId" value="@Model.Id" />
+                    <button type="submit" class="btn btn-success">Add to my Animelist</button>
+                </form>
+            }
         }
 
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb; margin-bottom: 1rem;">

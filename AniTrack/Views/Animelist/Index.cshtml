@@ -15,6 +15,7 @@
             <th>Name</th>
             <th>Episodes</th>
             <th>Genres</th>
+            <th></th> <!-- Remove button column -->
         </tr>
     </thead>
     <tbody>
@@ -42,6 +43,12 @@
                             <span>N/A</span>
                         }
                     </td>
+                    <td class="align-middle">
+                        <form asp-controller="Animelist" asp-action="Remove" method="post" style="display:inline;">
+                            <input type="hidden" name="animeId" value="@anime.AnimeId" />
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </td>
                 </tr>
                 entryNumber++;
             }
@@ -49,7 +56,7 @@
         else
         {
             <tr>
-                <td colspan="5" class="text-center">No animes in your list yet.</td>
+                <td colspan="6" class="text-center">No animes in your list yet.</td>
             </tr>
         }
     </tbody>

@@ -6,6 +6,10 @@
         Task<IEnumerable<AnimelistViewModel>> GetAnimelistAsync(string userId);
 
         Task<bool> AddAnimeToUserAnimelistAsync(string? animeId, string? userId);
+
+        Task<bool> RemoveAnimeFromUserAnimelistAsync(string? animeId, string? userId);
+
+        Task<bool> IsAnimeInUserAnimelist(string? userId, string? animeId);
     }
 
 }

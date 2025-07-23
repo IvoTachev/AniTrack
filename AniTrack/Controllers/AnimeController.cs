@@ -1,5 +1,6 @@
 ﻿namespace AniTrack.Web.Controllers
 {
+    using AniTrack.Services.Core;
     using AniTrack.Web.ViewModels.Anime;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Components.Forms;
@@ -10,10 +11,18 @@
 
     public class AnimeController : BaseController
     {
+
         private readonly IAnimeService animeService;
-        public AnimeController(IAnimeService animeService)
+        private readonly IAnimelistService animelistService;
+        public AnimeController(IAnimeService animeService, IAnimelistService animelistService)
         {
             this.animeService = animeService;
+            this.animelistService = animelistService;
+        }
+
+        private async Task<bool> IsAnimeInUserList(string userId, string animeId)
+        {
+            return await this.animelistService.IsAnimeInUserAnimelist(userId, animeId);
         }
         [AllowAnonymous]
         [HttpGet]
@@ -60,16 +69,25 @@
                 AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
                 if (animeDetails == null)
                 {
-                    //TODO: Add a not found view
                     return this.RedirectToAction(nameof(Index));
                 }
+
+                bool isInAnimelist = false;
+                if (User.Identity?.IsAuthenticated == true)
+                {
+                    string? userId = this.GetUserId();
+                    if (userId != null)
+                    {
+                        isInAnimelist = await IsAnimeInUserList(userId, animeDetails.Id);
+                    }
+                }
+                ViewBag.IsInAnimelist = isInAnimelist;
+
                 return this.View(animeDetails);
             }
             catch (Exception e)
             {
-                //TODO: Log the error
                 Console.WriteLine(e.Message);
-
                 return this.RedirectToAction(nameof(Index));
             }
 

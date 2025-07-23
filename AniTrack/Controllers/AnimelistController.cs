@@ -61,5 +61,30 @@ namespace AniTrack.Web.Controllers
                 return this.RedirectToAction(nameof(Index), "Home");
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Remove(string? animeId)
+        {
+            try
+            {
+                string? userId = this.GetUserId();
+                if (userId == null)
+                {
+                    return this.Forbid();
+                }
+                bool result = await this.animelistService.RemoveAnimeFromUserAnimelistAsync(animeId, userId);
+                if (result == false)
+                {
+                    return this.RedirectToAction(nameof(Index));
+                }
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                
+                return this.RedirectToAction(nameof(Index), "Home");
+            }
+        }   
     }
 }

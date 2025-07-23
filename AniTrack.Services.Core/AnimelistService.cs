@@ -42,16 +42,17 @@
         public async Task<bool> AddAnimeToUserAnimelistAsync(string? animeId, string? userId)
         {
             bool result = false;
-            if(animeId != null && userId !=null)
+            if (animeId != null && userId != null)
             {
                 bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
-                if(isAnimeIdValid)
+                if (isAnimeIdValid)
                 {
                     UserAnime? userAnime = await this.dbContext
                         .UsersAnimes
+                        .IgnoreQueryFilters()
                         .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
                                                                            au.AnimeId == validAnimeId);
-                    if(userAnime != null)
+                    if (userAnime != null)
                     {
                         userAnime.IsDeleted = false; // Restore the record if it exists
                     }
@@ -67,7 +68,53 @@
 
                     await this.dbContext.SaveChangesAsync();
                     result = true;
-                }   
+                }
+            }
+            return result;
+        }
+
+        public async Task<bool> RemoveAnimeFromUserAnimelistAsync(string? animeId, string? userId)
+        {
+            bool result = false;
+            if (animeId != null && userId != null)
+            {
+                bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
+                if (isAnimeIdValid)
+                {
+                    UserAnime? userAnime = await this.dbContext
+                        .UsersAnimes
+                        .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
+                                                                           au.AnimeId == validAnimeId);
+                    if (userAnime != null)
+                    {
+                        userAnime.IsDeleted = true; //Soft delete the record
+                        await this.dbContext.SaveChangesAsync();
+                        result = true;
+                    }
+                }
+            }
+            return result;
+        }
+
+        public async Task<bool> IsAnimeInUserAnimelist(string? userId, string? animeId)
+        {
+            bool result = false;
+            if (animeId != null && userId != null)
+            {
+                bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
+                if (isAnimeIdValid)
+                {
+                    UserAnime? userAnime = await this.dbContext
+                        .UsersAnimes
+                        .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
+                                                                           au.AnimeId == validAnimeId);
+
+                    if (userAnime != null)
+                    {
+                        result = true; // Anime is in user's animelist
+                    }
+                }
+
             }
             return result;
         }
