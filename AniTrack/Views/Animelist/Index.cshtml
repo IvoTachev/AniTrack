@@ -1,0 +1,56 @@
+﻿@using AniTrack.Data.Models
+@model IEnumerable<AniTrack.Web.ViewModels.Animelist.AnimelistViewModel>
+
+@{
+    ViewData["Title"] = "My Animelist";
+}
+
+<h2>My Animelist</h2>
+
+<table class="table table-striped table-dark" style="margin-top:2rem;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Poster</th>
+            <th>Name</th>
+            <th>Episodes</th>
+            <th>Genres</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int entryNumber = 1;
+            foreach (var anime in Model)
+            {
+                <tr>
+                    <td class="align-middle">@entryNumber</td>
+                    <td class="align-middle">
+                        <img src="@anime.ImageUrl" alt="@anime.Title" style="width:48px; border-radius:4px;" />
+                    </td>
+                    <td class="align-middle">
+                        <a asp-controller="Anime" asp-action="Details" asp-route-id="@anime.AnimeId">@anime.Title</a>
+                    </td>
+                    <td class="align-middle">@anime.Episodes</td>
+                    <td class="align-middle">
+                        @if (anime.Genres != null && anime.Genres.Any())
+                        {
+                            @string.Join(", ", anime.Genres.Select(g => g.Name))
+                        }
+                        else
+                        {
+                            <span>N/A</span>
+                        }
+                    </td>
+                </tr>
+                entryNumber++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center">No animes in your list yet.</td>
+            </tr>
+        }
+    </tbody>
+</table>

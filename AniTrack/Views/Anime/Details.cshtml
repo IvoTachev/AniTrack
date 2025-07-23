@@ -10,6 +10,14 @@
     <div style="display: flex; flex-direction: column; align-items: center; min-width: 225px;">
         <img src="@Model.ImageUrl" alt="@Model.Title" style="width: 225px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 1.5rem;" />
 
+        @if (User.Identity?.IsAuthenticated == true)
+        {
+            <form asp-controller="Animelist" asp-action="Add" method="post" style="margin-bottom: 1rem;">
+                <input type="hidden" name="animeId" value="@Model.Id" />
+                <button type="submit" class="btn btn-success">Add to my Animelist</button>
+            </form>
+        }
+
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb; margin-bottom: 1rem;">
             <strong>Aired:</strong>
             @Model.AirDate
@@ -40,10 +48,13 @@
         <h1 style="margin-top: 0; color: #fff;">@Model.Title</h1>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0;">Synopsis</h2>
-            <div>
-                <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>
-                <a class="btn btn-danger ms-2" asp-controller="Anime" asp-action="Delete" asp-route-id="@Model.Id">Delete Anime</a>
-            </div>
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <div>
+                    <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>
+                    <a class="btn btn-danger ms-2" asp-controller="Anime" asp-action="Delete" asp-route-id="@Model.Id">Delete Anime</a>
+                </div>
+            }
         </div>
         <div style="padding: 1rem; border-radius: 6px; border: 1.5px solid #bbb;">
             @Html.Raw(Model.Synopsis?.Replace("\n", "<br />"))

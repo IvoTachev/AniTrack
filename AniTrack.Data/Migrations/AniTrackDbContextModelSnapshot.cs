@@ -542,7 +542,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasIndex("AnimeId");
 
-                    b.ToTable("AnimesUsers", t =>
+                    b.ToTable("UsersAnimes", t =>
                         {
                             t.HasComment("Represents User Watchlist relation in database");
                         });

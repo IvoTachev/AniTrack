@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AniTrack.Data.Migrations
 {
     [DbContext(typeof(AniTrackDbContext))]
-    [Migration("20250723033635_UserAnimeAdded")]
-    partial class UserAnimeAdded
+    [Migration("20250723053037_UsersAnimeAdded")]
+    partial class UsersAnimeAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -545,7 +545,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasIndex("AnimeId");
 
-                    b.ToTable("AnimesUsers", t =>
+                    b.ToTable("UsersAnimes", t =>
                         {
                             t.HasComment("Represents User Watchlist relation in database");
                         });

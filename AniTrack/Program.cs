@@ -41,6 +41,7 @@ namespace AniTrack.Web
 
           
             builder.Services.AddScoped<IAnimeService, AnimeService>();
+            builder.Services.AddScoped<IAnimelistService, AnimelistService>();
 
             builder.Services.AddControllersWithViews();
 

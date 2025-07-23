@@ -1,20 +1,21 @@
 ﻿namespace AniTrack.Web.Controllers
 {
     using AniTrack.Web.ViewModels.Anime;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Components.Forms;
     using Microsoft.AspNetCore.Mvc;
     using Services.Core.Interfaces;
     using System.Threading.Tasks;
     using static ViewModels.ValidationMessages.Anime;
 
-    public class AnimeController : Controller
+    public class AnimeController : BaseController
     {
         private readonly IAnimeService animeService;
         public AnimeController(IAnimeService animeService)
         {
             this.animeService = animeService;
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Index()
         {
@@ -50,7 +51,7 @@
                 return this.View(inputModel);
             }
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> Details(string? id)
         {
