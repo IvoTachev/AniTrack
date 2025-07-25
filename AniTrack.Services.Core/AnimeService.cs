@@ -1,8 +1,6 @@
 ﻿namespace AniTrack.Services.Core
 {
-    using AniTrack.Data;
     using AniTrack.Data.Models;
-    using AniTrack.Data.Repository;
     using AniTrack.Data.Repository.Interface;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;

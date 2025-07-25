@@ -5,19 +5,20 @@
     using AniTrack.Web.ViewModels.Animelist;
     using Microsoft.EntityFrameworkCore;
     using AniTrack.Data.Models;
+    using AniTrack.Data.Repository.Interface;
 
     public class AnimelistService : IAnimelistService
     {
-        private readonly AniTrackDbContext dbContext;
+        private readonly IAnimelistRepository animelistRepository;
 
-        public AnimelistService(AniTrackDbContext dbContext)
+        public AnimelistService(IAnimelistRepository animelistRepository)
         {
-            this.dbContext = dbContext;
+            this.animelistRepository = animelistRepository;
         }
         public async Task<IEnumerable<AnimelistViewModel>> GetAnimelistAsync(string userId)
         {
-            IEnumerable<AnimelistViewModel> userAnimelist = await this.dbContext
-                .UsersAnimes
+            IEnumerable<AnimelistViewModel> userAnimelist = await this.animelistRepository
+                .GetAllAttached()
                 .Include(au => au.Anime)
                 .AsNoTracking()
                 .Where(au => au.UserId.ToLower() == userId.ToLower())
@@ -47,14 +48,15 @@
                 bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
                 if (isAnimeIdValid)
                 {
-                    UserAnime? userAnime = await this.dbContext
-                        .UsersAnimes
+                    UserAnime? userAnime = await this.animelistRepository
+                        .GetAllAttached()
                         .IgnoreQueryFilters()
                         .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
                                                                            au.AnimeId == validAnimeId);
                     if (userAnime != null)
                     {
                         userAnime.IsDeleted = false; // Restore the record if it exists
+                        result = await this.animelistRepository.UpdateAsync(userAnime); // Update the record
                     }
                     else
                     {
@@ -63,11 +65,9 @@
                             UserId = userId,
                             AnimeId = validAnimeId
                         };
-                        await this.dbContext.UsersAnimes.AddAsync(userAnime);
+                        await this.animelistRepository.AddAsync(userAnime); // Add new record
+                        result = true; // Successfully added new record
                     }
-
-                    await this.dbContext.SaveChangesAsync();
-                    result = true;
                 }
             }
             return result;
@@ -81,15 +81,14 @@
                 bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
                 if (isAnimeIdValid)
                 {
-                    UserAnime? userAnime = await this.dbContext
-                        .UsersAnimes
+                    UserAnime? userAnime = await this
+                        .animelistRepository                        
                         .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
                                                                            au.AnimeId == validAnimeId);
                     if (userAnime != null)
                     {
-                        userAnime.IsDeleted = true; //Soft delete the record
-                        await this.dbContext.SaveChangesAsync();
-                        result = true;
+                        result = await this.animelistRepository
+                            .DeleteAsync(userAnime); // Soft delete the record
                     }
                 }
             }
@@ -104,8 +103,8 @@
                 bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);
                 if (isAnimeIdValid)
                 {
-                    UserAnime? userAnime = await this.dbContext
-                        .UsersAnimes
+                    UserAnime? userAnime = await this
+                        .animelistRepository
                         .SingleOrDefaultAsync(au => au.UserId.ToLower() == userId.ToLower() &&
                                                                            au.AnimeId == validAnimeId);
 
