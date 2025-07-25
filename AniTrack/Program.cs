@@ -43,6 +43,7 @@ namespace AniTrack.Web
 
             builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
             builder.Services.AddScoped<IAnimelistRepository, AnimelistRepository>();
+            builder.Services.AddScoped<IAnimeGenreRepository, AnimeGenreRepository>();
             builder.Services.AddScoped<IAnimeService, AnimeService>();
             builder.Services.AddScoped<IAnimelistService, AnimelistService>();
 

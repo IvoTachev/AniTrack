@@ -162,7 +162,7 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(AnimeDetailsViewModel inputModel)
+        public async Task<IActionResult> Delete(DeleteAnimeViewModel inputModel)
         {
             try
             {

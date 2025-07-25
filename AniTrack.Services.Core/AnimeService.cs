@@ -2,6 +2,8 @@
 {
     using AniTrack.Data;
     using AniTrack.Data.Models;
+    using AniTrack.Data.Repository;
+    using AniTrack.Data.Repository.Interface;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using System.Globalization;
@@ -9,15 +11,18 @@
     using static AniTrack.GCommon.ApplicationConstants;
     public class AnimeService : IAnimeService
     {
-        private readonly AniTrackDbContext dbContext;
-        public AnimeService(AniTrackDbContext dbContext)
+        private readonly IAnimeRepository animeRepository;
+        private readonly IAnimeGenreRepository animeGenreRepository;
+        
+        public AnimeService(IAnimeRepository animeRepository, IAnimeGenreRepository animeGenreRepository)
         {
-            this.dbContext = dbContext;
+            this.animeRepository = animeRepository;
+            this.animeGenreRepository = animeGenreRepository;
         }
         public async Task<IEnumerable<TopAnimesViewModel>> GetTopAnimesAsync()
         {
-            IEnumerable<TopAnimesViewModel> topAnimes = await this.dbContext
-                .Animes
+            IEnumerable<TopAnimesViewModel> topAnimes = await this.animeRepository
+                .GetAllAttached()  
                 .AsNoTracking()
                 .Take(10)
                 .Select(a => new TopAnimesViewModel()
@@ -36,14 +41,14 @@
             {
                 Title = inputModel.Title,
                 Episodes = inputModel.Episodes,
-                AirDate = DateOnly.ParseExact(inputModel.AirDate, ApplicationDateFormat, CultureInfo.InvariantCulture,DateTimeStyles.None), 
+                AirDate = DateOnly.ParseExact(inputModel.AirDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), 
                 EndDate = string.IsNullOrEmpty(inputModel.EndDate) ? null : DateOnly.ParseExact(inputModel.EndDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 Synopsis = inputModel.Synopsis,
                 ImageUrl = inputModel.ImageUrl
             };
 
-            await this.dbContext.Animes.AddAsync(newAnime);
-            await this.dbContext.SaveChangesAsync();
+            await this.animeRepository.AddAsync(newAnime);
+
 
             // Add AnimeGenre entries for each selected genre
             foreach (int genreId in inputModel.SelectedGenreIds)
@@ -53,10 +58,8 @@
                     AnimeId = newAnime.Id,
                     GenreId = genreId
                 };
-                await this.dbContext.AnimesGenres.AddAsync(animeGenre);
+                await this.animeGenreRepository.AddAsync(animeGenre);
             }
-
-            await this.dbContext.SaveChangesAsync();
         }
 
         public async Task<AnimeDetailsViewModel?> GetAnimeDetailsAsync(string? id)
@@ -65,8 +68,8 @@
             bool isIdValid = int.TryParse(id, out int animeId);
             if (isIdValid)
             {
-                animeDetails = await this.dbContext
-                    .Animes
+                animeDetails = await this.animeRepository
+                    .GetAllAttached()
                     .AsNoTracking()
                     .Where(a => a.Id == animeId)
                     .Select(a => new AnimeDetailsViewModel()
@@ -99,8 +102,8 @@
             bool isIdValid = int.TryParse(id, out int animeId);
             if (isIdValid)
             {
-                animeDetails = await this.dbContext
-                    .Animes
+                animeDetails = await this.animeRepository
+                    .GetAllAttached()
                     .AsNoTracking()
                     .Where(a => a.Id == animeId)
                     .Select(a => new EditAnimeFormModel()
@@ -130,16 +133,14 @@
             {
                 return false;
             }
-            // Fetch the anime to edit, including its genres
-            Anime? editableAnime = await this.dbContext
-                .Animes
-                .Include(a => a.AnimeGenres)
-                .SingleOrDefaultAsync(a => a.Id == animeId);
-            // If the anime does not exist, return false
+
+            // Fetch the anime to edit
+            Anime? editableAnime = await this.animeRepository.GetByIdAsync(animeId);
             if (editableAnime == null)
             {
                 return false;
             }
+
             // Update main properties
             editableAnime.Title = inputModel.Title;
             editableAnime.Episodes = inputModel.Episodes;
@@ -150,16 +151,17 @@
             editableAnime.Synopsis = inputModel.Synopsis;
             editableAnime.ImageUrl = inputModel.ImageUrl;
 
+            // Update the anime entity in the repository
+            await this.animeRepository.UpdateAsync(editableAnime);
+
             // Get all AnimeGenre entries for this anime, including deleted ones
-            List<AnimeGenre> allGenres = await this.dbContext.AnimesGenres
-                .IgnoreQueryFilters()
-                .Where(ag => ag.AnimeId == animeId)
-                .ToListAsync();
+            List<AnimeGenre> allGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId,true);   
 
             // Mark genres as deleted if not in selected
             foreach (AnimeGenre ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
             {
                 ag.IsDeleted = true;
+                await this.animeGenreRepository.UpdateAsync(ag);
             }
 
             // For each selected genre, add or undelete as needed
@@ -174,16 +176,16 @@
                         GenreId = genreId,
                         IsDeleted = false
                     };
-                    await this.dbContext.AnimesGenres.AddAsync(newAnimeGenre);
+                    await this.animeGenreRepository.AddAsync(newAnimeGenre);
                 }
                 else if (ag.IsDeleted)
                 {
                     ag.IsDeleted = false;
+                    await this.animeGenreRepository.UpdateAsync(ag);
                 }
                 // else: already present and not deleted, do nothing
             }
 
-            await this.dbContext.SaveChangesAsync();
             return true;
         }
 
@@ -193,8 +195,8 @@
             bool isIdValid = int.TryParse(id, out int animeId);
             if (isIdValid)
             {
-                animeDetails = await this.dbContext
-                    .Animes
+                animeDetails = await this.animeRepository
+                    .GetAllAttached()
                     .AsNoTracking()
                     .Where(a => a.Id == animeId)
                     .Select(a => new DeleteAnimeViewModel()
@@ -210,34 +212,29 @@
         public async Task<bool> SoftDeleteAnimeAsync(string? id)
         {
             bool isIdValid = int.TryParse(id, out int animeId);
-            if(!isIdValid)
+            if (!isIdValid)
             {
                 return false;
             }
 
-            Anime? animeForDelete = await this.dbContext
-                .Animes
-                .FindAsync(animeId);
+            Anime? animeForDelete = await this.animeRepository.GetByIdAsync(animeId);
 
-            if(animeForDelete == null)
+            if (animeForDelete == null)
             {
                 return false;
             }
-
-            // Soft delete the anime by marking it as deleted
-            animeForDelete.IsDeleted = true;
 
             // Soft delete related AnimeGenre entries
-            List<AnimeGenre> relatedGenres = await this.dbContext.AnimesGenres
-                .Where(ag => ag.AnimeId == animeId && !ag.IsDeleted)
-                .ToListAsync();
+            List<AnimeGenre> relatedGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, false);
 
             foreach (AnimeGenre ag in relatedGenres)
             {
                 ag.IsDeleted = true;
+                await this.animeGenreRepository.UpdateAsync(ag);
             }
 
-            await this.dbContext.SaveChangesAsync();
+            await this.animeRepository.DeleteAsync(animeForDelete);
+   
             return true;
         }
 
@@ -249,27 +246,20 @@
                 return false;
             }
 
-            Anime? animeForDelete = await this.dbContext
-                .Animes
-                .FindAsync(animeId);
-
+            Anime? animeForDelete = await this.animeRepository.GetByIdAsync(animeId);
+            
             if (animeForDelete == null)
             {
                 return false;
             }
 
             // Remove all related AnimeGenre entries (including soft-deleted)
-            List<AnimeGenre> relatedGenres = await this.dbContext.AnimesGenres
-                .IgnoreQueryFilters()
-                .Where(ag => ag.AnimeId == animeId)
-                .ToListAsync();
+            List<AnimeGenre> relatedGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, true);
 
-            this.dbContext.AnimesGenres.RemoveRange(relatedGenres);
+           await this.animeGenreRepository.HardDeleteList(relatedGenres);
 
             // Remove the anime itself
-            this.dbContext.Animes.Remove(animeForDelete);
-
-            await this.dbContext.SaveChangesAsync();
+          await this.animeRepository.HardDeleteAsync(animeForDelete);
 
             return true;
         }
