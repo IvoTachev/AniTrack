@@ -1,5 +1,7 @@
 namespace AniTrack.Web
 {
+    using AniTrack.Data.Repository;
+    using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core;
     using AniTrack.Services.Core.Interfaces;
     using Data;
@@ -39,7 +41,8 @@ namespace AniTrack.Web
                 })
                 .AddEntityFrameworkStores<AniTrackDbContext>();
 
-          
+            builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
+            builder.Services.AddScoped<IAnimelistRepository, AnimelistRepository>();
             builder.Services.AddScoped<IAnimeService, AnimeService>();
             builder.Services.AddScoped<IAnimelistService, AnimelistService>();
 
