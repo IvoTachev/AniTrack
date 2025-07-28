@@ -53,3 +53,11 @@ footer a:focus {
     background-image: none !important;
     min-height: 100vh;
 }
+
+/* Make all navbar links the same color */
+.navbar .nav-link {
+    color: #0d6efd !important; /* Bootstrap's primary blue */
+}
+.navbar .nav-link:hover, .navbar .nav-link:focus {
+    color: #0a58ca !important; /* A slightly darker blue for hover/focus */
+}
