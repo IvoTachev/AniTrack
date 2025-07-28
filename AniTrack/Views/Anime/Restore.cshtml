@@ -1,0 +1,22 @@
+﻿@model AniTrack.Web.ViewModels.Anime.DeleteAnimeViewModel
+
+@{
+    ViewData["Title"] = "Restore Anime";
+}
+
+<div style="max-width: 500px; margin: 2rem auto; padding: 2rem; border-radius: 8px; border: 2px solid #28a745; background: #181818; color: #f5f5f5;">
+    <h3 style="color: #28a745; margin-bottom: 1.5rem;">Are you sure you want to restore this Anime?</h3>
+    <div style="display: flex; gap: 1.5rem; align-items: flex-start;">
+        <img src="@Model.ImageUrl" alt="@Model.Title" style="width: 120px; border-radius: 6px; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" />
+        <div style="flex: 1;">
+            <h4 style="margin-top: 0; color: #fff;">@Model.Title</h4>
+        </div>
+    </div>
+    <div style="display: flex; justify-content: center; gap: 1rem; margin-top: 2rem;">
+        <form asp-controller="Anime" asp-action="Restore" method="post" style="display: inline;">
+            <input type="hidden" asp-for="Id" />
+            <button type="submit" class="btn btn-success">Restore</button>
+        </form>
+        <a class="btn btn-secondary" asp-controller="Anime" asp-action="Details" asp-route-id="@Model.Id">Cancel</a>
+    </div>
+</div>

@@ -18,5 +18,8 @@
         Task<bool> SoftDeleteAnimeAsync(string? id);
 
         Task<bool> HardDeleteAnimeAsync(string? id);
+
+        Task<DeleteAnimeViewModel?> GetAnimeDetailsForRestoreByIdAsync(string? id);
+        Task<bool> RestoreAnimeAsync(string? id);
     }
 }

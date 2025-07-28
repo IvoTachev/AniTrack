@@ -222,6 +222,7 @@
                 return false;
             }
 
+
             // Soft delete related AnimeGenre entries
             List<AnimeGenre> relatedGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, false);
 
@@ -233,6 +234,60 @@
 
             await this.animeRepository.DeleteAsync(animeForDelete);
    
+            return true;
+        }
+
+        public async Task<DeleteAnimeViewModel?> GetAnimeDetailsForRestoreByIdAsync(string? id)
+        {
+            DeleteAnimeViewModel? animeDetails = null;
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (isIdValid)
+            {
+                animeDetails = await this.animeRepository
+                    .GetAllAttached()
+                    .IgnoreQueryFilters()
+                    .AsNoTracking()
+                    .Where(a => a.Id == animeId && a.IsDeleted == true)
+                    .Select(a => new DeleteAnimeViewModel()
+                    {
+                        Id = a.Id.ToString(),
+                        Title = a.Title,
+                        ImageUrl = a.ImageUrl
+                    })
+                    .SingleOrDefaultAsync();
+            }
+            return animeDetails;
+        }
+
+        public async Task<bool> RestoreAnimeAsync(string? id)
+        {
+            bool isIdValid = int.TryParse(id, out int animeId);
+            if (!isIdValid)
+            {
+                return false;
+            }
+
+            Anime? animeForRestore = await this.animeRepository
+                .GetAllAttached()
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(a => a.Id == animeId);
+            if (animeForRestore == null || !animeForRestore.IsDeleted)
+            {
+                // Anime not found or not soft-deleted
+                return false;
+            }
+            animeForRestore.IsDeleted = false;
+            // Restore related AnimeGenre entries
+            List<AnimeGenre> relatedGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, true);
+
+            foreach (AnimeGenre ag in relatedGenres)
+            {
+                ag.IsDeleted = false;
+                await this.animeGenreRepository.UpdateAsync(ag);
+            }
+
+            await this.animeRepository.UpdateAsync(animeForRestore);
+
             return true;
         }
 
@@ -261,5 +316,7 @@
 
             return true;
         }
+
+     
     }
 }

@@ -188,5 +188,53 @@
                 return this.RedirectToAction(nameof(Index));
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Restore(string? id)
+        {
+            try
+            {
+                DeleteAnimeViewModel? animeDetails = await this.animeService.GetAnimeDetailsForRestoreByIdAsync(id);
+                if (animeDetails == null)
+                {
+                    //Not found view
+                    return this.View("NotFoundError");
+                }
+                return this.View(animeDetails);
+            }
+            catch (Exception e)
+            {
+                //Todo: Log the error
+                Console.WriteLine(e.Message);
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Restore(DeleteAnimeViewModel inputModel)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    return this.RedirectToAction(nameof(Index));
+                }
+
+                bool restoreResult = await this.animeService.RestoreAnimeAsync(inputModel.Id);
+                if (!restoreResult)
+                {
+                    //TODO: Add a notification for unsuccessful restoration
+                    return this.RedirectToAction(nameof(Index));
+                }
+                //TODO: Add a notification for successful restoration
+                return this.RedirectToAction(nameof(Index));
+            }
+            catch (Exception ex)
+            {
+                //TODO: Log the error
+                Console.WriteLine(ex.Message);
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
     }
 }
