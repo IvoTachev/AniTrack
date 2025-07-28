@@ -54,7 +54,7 @@
 
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 this.ModelState.AddModelError(string.Empty, ServiceCreateError);
                 return this.View(inputModel);

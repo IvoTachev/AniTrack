@@ -1,8 +1,6 @@
 namespace AniTrack.Web
 {
-    using AniTrack.Data.Repository;
     using AniTrack.Data.Repository.Interface;
-    using AniTrack.Services.Core;
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.Infrastructure.Extensions;
     using Data;
@@ -13,9 +11,9 @@ namespace AniTrack.Web
     {
         public static void Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+            string connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
                                    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services
@@ -42,10 +40,8 @@ namespace AniTrack.Web
                 })
                 .AddEntityFrameworkStores<AniTrackDbContext>();
 
-            builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
-            builder.Services.AddScoped<IAnimelistRepository, AnimelistRepository>();
-            builder.Services.AddScoped<IAnimeGenreRepository, AnimeGenreRepository>();
-
+         
+            builder.Services.AddRepositories(typeof(IAnimeRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IAnimeService).Assembly);
 
             builder.Services.AddControllersWithViews();
