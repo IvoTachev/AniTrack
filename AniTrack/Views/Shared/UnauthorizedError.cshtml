@@ -1,0 +1,14 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+    var statusCode = ViewBag.StatusCode as int? ?? Context.Response.StatusCode;
+    var message = statusCode == 403
+        ? "You do not have permission to access this resource."
+        : "You must be logged in to access this resource.";
+}
+
+<div style="max-width: 500px; margin: 3rem auto; padding: 2rem; border-radius: 8px; border: 2px solid #dc3545; background: #181818; color: #f5f5f5; text-align: center;">
+    <h1 style="font-size: 3rem; color: #dc3545;">@statusCode</h1>
+    <h2 style="margin-bottom: 1.5rem;">Access Denied</h2>
+    <p style="font-size: 1.2rem;">@message</p>
+    <a class="btn btn-primary" href="@Url.Action("Index", "Home")" style="margin-top: 2rem;">Return to Home</a>
+</div>

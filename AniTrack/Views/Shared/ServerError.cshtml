@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Server Error";
+}
+
+<div style="max-width: 500px; margin: 3rem auto; padding: 2rem; border-radius: 8px; border: 2px solid #dc3545; background: #181818; color: #f5f5f5; text-align: center;">
+    <h1 style="font-size: 3rem; color: #dc3545;">500</h1>
+    <h2 style="margin-bottom: 1.5rem;">Internal Server Error</h2>
+    <p style="font-size: 1.2rem;">
+        Oops! Something went wrong on our end.<br />
+        Please try again later or contact support if the problem persists.
+    </p>
+    <a class="btn btn-primary" href="@Url.Action("Index", "Home")" style="margin-top: 2rem;">Return to Home</a>
+</div>

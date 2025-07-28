@@ -1,6 +1,4 @@
-﻿
-
-namespace AniTrack.Web.Controllers
+﻿namespace AniTrack.Web.Controllers
 {
     using Microsoft.AspNetCore.Mvc;
     using AniTrack.Web.ViewModels.Animelist;

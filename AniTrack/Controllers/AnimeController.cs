@@ -69,7 +69,8 @@
                 AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
                 if (animeDetails == null)
                 {
-                    return this.RedirectToAction(nameof(Index));
+                    //Not found view
+                    return this.View("NotFoundError");
                 }
 
                 bool isInAnimelist = false;
@@ -101,8 +102,8 @@
                 EditAnimeFormModel? editAnimeModel = await this.animeService.GetAnimeDetailsByIdAsync(id);
                 if (editAnimeModel == null)
                 {
-                    //Todo: Add a not found view
-                    return this.RedirectToAction(nameof(Index));
+                    //Not found view
+                    return this.View("NotFoundError");
                 }
 
                 return this.View(editAnimeModel);
@@ -126,8 +127,8 @@
                 bool isEdited = await this.animeService.EditAnimeAsync(inputModel);
                 if (!isEdited)
                 {
-                    //TODO: Add a not found view
-                    return this.RedirectToAction(nameof(Index));
+                    //Not found view
+                    return this.View("NotFoundError");
                 }
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
@@ -148,8 +149,8 @@
                 DeleteAnimeViewModel? animeDetails = await this.animeService.GetAnimeDetailsForDeleteByIdAsync(id);
                 if (animeDetails == null)
                 {
-                    //TODO: Add a not found view
-                    return this.RedirectToAction(nameof(Index));
+                    //Not found view
+                    return this.View("NotFoundError");
                 }
                 return this.View(animeDetails);
             }

@@ -1,0 +1,13 @@
+﻿@{
+    ViewData["Title"] = "Page Not Found";
+}
+
+<div style="max-width: 500px; margin: 3rem auto; padding: 2rem; border-radius: 8px; border: 2px solid #ffc107; background: #181818; color: #f5f5f5; text-align: center;">
+    <h1 style="font-size: 3rem; color: #ffc107;">404</h1>
+    <h2 style="margin-bottom: 1.5rem;">Page Not Found</h2>
+    <p style="font-size: 1.2rem;">
+        Sorry, the page you are looking for could not be found.<br />
+        It may have been moved, deleted, or never existed.
+    </p>
+    <a class="btn btn-primary" href="@Url.Action("Index", "Home")" style="margin-top: 2rem;">Return to Home</a>
+</div>

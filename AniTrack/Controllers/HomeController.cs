@@ -18,9 +18,36 @@ namespace AniTrack.Web.Controllers
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Error(int? statusCode)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            if (statusCode == null)
+            {
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
+            else if(statusCode == 401)
+            {
+                Response.StatusCode = 401;
+                return View("UnauthorizedError");
+            }
+            else if (statusCode == 403)
+            {
+                Response.StatusCode = 403;
+                return View("UnauthorizedError");
+            }
+            else if (statusCode == 404)
+            {
+                Response.StatusCode = 404;
+                return View("NotFoundError");
+            }
+            else if (statusCode == 500)
+            {
+                Response.StatusCode = 500;
+                return View("ServerError");
+            }
+            else
+            {
+                return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            }
         }
     }
 }
