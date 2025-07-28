@@ -1,12 +1,12 @@
 ﻿@using AniTrack.Web.ViewModels.Anime
-@model IEnumerable<TopAnimesViewModel>
+@model AnimePageViewModel
 @{
     ViewData["Title"] = "Top Animes";
 }
 
 <h2>Top Animes</h2>
 <div class="anime-grid">
-    @foreach (var Anime in Model)
+    @foreach (var Anime in Model.Animes)
     {
         <div class="anime-card">
             <div class="anime-title">@Anime.Title</div>
@@ -16,6 +16,20 @@
         </div>
     }
 </div>
+
+@if (Model.TotalPages > 1)
+{
+    <nav aria-label="Anime pagination" style="margin-top:2rem;">
+        <ul class="pagination">
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" asp-action="Index" asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+}
 
 <style>
     .anime-grid {

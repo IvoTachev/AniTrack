@@ -34,7 +34,7 @@
     </p>
 
     <!-- Sign Up Button (only for not logged in users) -->
-    @if (!User.Identity.IsAuthenticated)
+    @if (User.Identity != null && !User.Identity.IsAuthenticated)
     {
         <div style="text-align: center; margin-top: 2.5rem;">
             <a class="btn btn-lg btn-primary" asp-area="Identity" asp-page="/Account/Register"

@@ -7,7 +7,7 @@ namespace AniTrack.Web.Controllers
     {
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> About()
+        public IActionResult About()
         {
             return this.View();
         }
