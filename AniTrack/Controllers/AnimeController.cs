@@ -52,7 +52,7 @@
             {
                 await this.animeService.AddAnimeAsync(inputModel);
 
-                return this.RedirectToAction(nameof(Index));
+                return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
             catch (Exception)
             {
@@ -226,8 +226,8 @@
                     //TODO: Add a notification for unsuccessful restoration
                     return this.RedirectToAction(nameof(Index));
                 }
-                //TODO: Add a notification for successful restoration
-                return this.RedirectToAction(nameof(Index));
+                
+                return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
             catch (Exception ex)
             {
