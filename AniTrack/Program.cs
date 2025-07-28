@@ -4,6 +4,7 @@ namespace AniTrack.Web
     using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core;
     using AniTrack.Services.Core.Interfaces;
+    using AniTrack.Web.Infrastructure.Extensions;
     using Data;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
@@ -44,8 +45,8 @@ namespace AniTrack.Web
             builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
             builder.Services.AddScoped<IAnimelistRepository, AnimelistRepository>();
             builder.Services.AddScoped<IAnimeGenreRepository, AnimeGenreRepository>();
-            builder.Services.AddScoped<IAnimeService, AnimeService>();
-            builder.Services.AddScoped<IAnimelistService, AnimelistService>();
+
+            builder.Services.AddUserDefinedServices(typeof(IAnimeService).Assembly);
 
             builder.Services.AddControllersWithViews();
 

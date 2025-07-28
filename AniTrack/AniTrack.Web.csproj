@@ -21,6 +21,7 @@
     <ProjectReference Include="..\AniTrack.Data\AniTrack.Data.csproj" />
     <ProjectReference Include="..\AniTrack.GCommon\AniTrack.GCommon.csproj" />
     <ProjectReference Include="..\AniTrack.Services.Core\AniTrack.Services.Core.csproj" />
+    <ProjectReference Include="..\AniTrack.Web.Infrastructure\AniTrack.Web.Infrastructure.csproj" />
     <ProjectReference Include="..\AniTrack.Web.ViewModels\AniTrack.Web.ViewModels.csproj" />
   </ItemGroup>
 

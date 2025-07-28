@@ -65,7 +65,7 @@
         public async Task<IActionResult> Details(string? id)
         {
             try
-            {
+            {   
                 AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
                 if (animeDetails == null)
                 {
