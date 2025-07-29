@@ -1,14 +1,12 @@
 ﻿namespace AniTrack.Web.Controllers
 {
-    using AniTrack.Services.Core;
     using AniTrack.Web.ViewModels.Anime;
     using Microsoft.AspNetCore.Authorization;
-    using Microsoft.AspNetCore.Components.Forms;
     using Microsoft.AspNetCore.Mvc;
     using Services.Core.Interfaces;
     using System.Threading.Tasks;
     using static ViewModels.ValidationMessages.Anime;
-    using System.Net.Http.Json;
+   
 
     public class AnimeController : BaseController
     {
@@ -51,12 +49,14 @@
             return View(ViewModel);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public IActionResult Add()
         {
             return this.View();
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
 
         public async Task<IActionResult> Add(AddAnimeFormModel inputModel)
@@ -112,6 +112,7 @@
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Edit(string? id)
         {
@@ -133,6 +134,7 @@
                 return this.RedirectToAction(nameof(Index));
             }
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Edit(EditAnimeFormModel inputModel)
         {
@@ -159,6 +161,7 @@
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Delete(string? id)
         {
@@ -180,6 +183,7 @@
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Delete(DeleteAnimeViewModel inputModel)
         {
@@ -207,6 +211,7 @@
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public async Task<IActionResult> Restore(string? id)
         {
@@ -228,6 +233,7 @@
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<IActionResult> Restore(DeleteAnimeViewModel inputModel)
         {

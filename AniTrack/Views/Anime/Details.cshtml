@@ -1,4 +1,5 @@
 ﻿@using AniTrack.Web.ViewModels.Anime
+@using static AniTrack.GCommon.ApplicationConstants
 @model AnimeDetailsViewModel
 
 @{
@@ -58,7 +59,7 @@
         <h1 style="margin-top: 0; color: #fff;">@Model.Title</h1>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0;">Synopsis</h2>
-            @if (User.Identity?.IsAuthenticated == true)
+            @if (User.Identity?.IsAuthenticated == true && User.IsInRole(AdminRoleName))
             {
                 <div>
                     <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>

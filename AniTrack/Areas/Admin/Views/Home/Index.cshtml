@@ -1,0 +1,17 @@
+﻿@{
+    ViewData["Title"] = "Admin Home";
+}
+
+<div class="d-flex justify-content-center align-items-center" style="height: 70vh;">
+    <div class="text-center">
+        <a asp-area="" asp-controller="Anime" asp-action="Add"
+           class="btn btn-primary btn-lg mb-4" style="width: 250px; font-size: 1.5rem;">
+            Add anime
+        </a>
+        <br />
+        <a asp-area="Admin" asp-controller="Home" asp-action="RestoreAnimes"
+           class="btn btn-success btn-lg" style="width: 250px; font-size: 1.5rem;">
+            Restore anime
+        </a>
+    </div>
+</div>

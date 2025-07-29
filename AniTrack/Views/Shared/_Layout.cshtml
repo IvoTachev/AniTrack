@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using static AniTrack.GCommon.ApplicationConstants
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -13,7 +15,7 @@
     <header>
         <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">AniTrack</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">AniTrack</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -22,26 +24,25 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Anime</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Anime" asp-action="Index">Top Animes</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Anime" asp-action="Index">Top Animes</a>
                                 @* Add more anime-related links here if needed *@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Help</a>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" asp-controller="Help" asp-action="About">About</a>
+                                <a class="dropdown-item" asp-area="" asp-controller="Help" asp-action="About">About</a>
                             </div>
                         </li>
-                        @if (User.Identity?.IsAuthenticated == true)
+                        @if (User.Identity?.IsAuthenticated == true && User.IsInRole(AdminRoleName))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
                                 <div class="dropdown-menu">
-                                    <a class="dropdown-item" asp-controller="Anime" asp-action="Add">Add Anime</a>
-                                    <a class="dropdown-item" href="#">Another action</a>
-                                    <a class="dropdown-item" href="#">Something else here</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Board</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Anime" asp-action="Add">Add Anime</a>
+                                    <a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="RestoreAnimes">Restore Animes</a>
                                 </div>
                             </li>
                         }
@@ -53,7 +54,7 @@
                     </form> *@
                     @if (User.Identity?.IsAuthenticated == true)
                     {
-                        <a class="nav-link d-inline-block" asp-controller="Animelist" asp-action="Index" title="My Animelist" style="font-size: 1.2rem; vertical-align: middle;">
+                        <a class="nav-link d-inline-block" asp-area="" asp-controller="Animelist" asp-action="Index" title="My Animelist" style="font-size: 1.2rem; vertical-align: middle;">
                             <i class="bi bi-list" aria-hidden="true"></i>
                             <span style="margin-left: 0.5rem;">My Animelist</span>
                         </a>

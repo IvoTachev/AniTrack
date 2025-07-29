@@ -1,0 +1,43 @@
+﻿@using AniTrack.Web.ViewModels.Admin.Home;
+@model IEnumerable<RestoreAnimesViewModel>
+
+@{
+    ViewData["Title"] = "Restore Deleted Animes";
+}
+
+<h2 class="mb-4 text-center">@ViewData["Title"]</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>Poster</th>
+                <th>Title</th>
+                <th>Episodes</th>
+                <th>Aired</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var anime in Model)
+        {
+            <tr>
+                <td>
+                    <img src="@anime.ImageUrl" alt="@anime.Title" style="width: 80px; border-radius: 6px;" />
+                </td>
+                <td>@anime.Title</td>
+                <td>@anime.Episodes</td>
+                <td>
+                    @anime.AirDate - @anime.EndDate
+                </td>
+                <td>
+                    <a asp-area="" asp-controller="Anime" asp-action="Restore" asp-route-id="@anime.Id"
+                       class="btn btn-success btn-sm">
+                        Restore
+                    </a>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
