@@ -2,10 +2,12 @@
 @model IEnumerable<AnimelistViewModel>
 
 @{
-    ViewData["Title"] = "My Animelist";
+    var username = ViewData["Username"] as string;
+    var isOwnList = ViewData["IsOwnList"] as bool? ?? false;
+    ViewData["Title"] = isOwnList ? "My Animelist" : $"{username}'s List";
 }
 
-<h2>My Animelist</h2>
+<h2>@(isOwnList ? "My Animelist" : $"{username}'s List")</h2>
 
 <table class="table table-striped table-dark" style="margin-top:2rem;">
     <thead>
@@ -15,7 +17,10 @@
             <th>Name</th>
             <th>Episodes</th>
             <th>Genres</th>
-            <th></th> <!-- Remove button column -->
+            @if (isOwnList)
+            {
+                <th></th> <!-- Remove button column -->
+            }
         </tr>
     </thead>
     <tbody>
@@ -43,12 +48,15 @@
                             <span>N/A</span>
                         }
                     </td>
-                    <td class="align-middle">
-                        <form asp-controller="Animelist" asp-action="Remove" method="post" style="display:inline;">
-                            <input type="hidden" name="animeId" value="@anime.AnimeId" />
-                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
-                        </form>
-                    </td>
+                    @if (isOwnList)
+                    {
+                        <td class="align-middle">
+                            <form asp-controller="Animelist" asp-action="Remove" method="post" style="display:inline;">
+                                <input type="hidden" name="animeId" value="@anime.AnimeId" />
+                                <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                            </form>
+                        </td>
+                    }
                 </tr>
                 entryNumber++;
             }
@@ -56,7 +64,7 @@
         else
         {
             <tr>
-                <td colspan="6" class="text-center">No animes in your list yet.</td>
+                <td colspan="@(isOwnList ? "6" : "5")" class="text-center">No animes in this list yet.</td>
             </tr>
         }
     </tbody>

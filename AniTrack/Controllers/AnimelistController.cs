@@ -4,6 +4,8 @@
     using AniTrack.Web.ViewModels.Animelist;
     using System.Collections.Generic;
     using AniTrack.Services.Core.Interfaces;
+    using Microsoft.AspNetCore.Authorization;
+
     public class AnimelistController : BaseController
     {
         private readonly IAnimelistService animelistService;
@@ -13,18 +15,31 @@
             this.animelistService = animelistService;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        [Route("Animelist/{username?}")]
+        public async Task<IActionResult> Index(string? username)
         {
             try
             {
-                string? userId = this.GetUserId();
-                if(userId==null)
+                if (string.IsNullOrEmpty(username))
                 {
-                    return this.Forbid();
+                    // Redirect to current user's animelist
+                    // Action can be used only by logged in users and you can not register without Username.
+                    string? currentUsername = User?.Identity?.Name;
+                    return this.RedirectToAction(nameof(Index), new { username = currentUsername });
                 }
 
-                IEnumerable<AnimelistViewModel> userAnimelist = await this.animelistService
-                                                                          .GetAnimelistAsync(userId);
+                IEnumerable<AnimelistViewModel> userAnimelist = await this.animelistService.GetAnimelistAsync(username);
+
+                //If a username is invalid, or that user has no animes added to his list throw a 404 not found.
+                //Ignore that if the user is checking his own animelist, because he can see his own empty list.
+                if ((userAnimelist == null || !userAnimelist.Any()) && (username != User?.Identity?.Name)) 
+                {
+                    return NotFound(); // Returns 404 error page
+                }
+
+                ViewData["Username"] = username;
+                ViewData["IsOwnList"] = string.Equals(username, User?.Identity?.Name, StringComparison.OrdinalIgnoreCase);
+
                 return View(userAnimelist); 
             }
             catch (Exception ex)

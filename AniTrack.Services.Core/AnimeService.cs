@@ -26,7 +26,7 @@
                 .GetAllAttached()
                 .AsNoTracking()
                 .OrderByDescending(a => a.UserWatchlists.Count(uw => uw.IsDeleted == false)) //UserWatchlists is a collection of users who have watched this anime. Higher count = more popular
-                .ThenByDescending(a => a.Title)
+                .ThenBy(a => a.Title)
                 .Select(a => new TopAnimesViewModel()
                 {
                     Id = a.Id.ToString(),

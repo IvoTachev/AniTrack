@@ -10,13 +10,22 @@
     public class AnimelistService : IAnimelistService
     {
         private readonly IAnimelistRepository animelistRepository;
+        private readonly IApplicationUserRepository applicationUserRepository;
 
-        public AnimelistService(IAnimelistRepository animelistRepository)
+        public AnimelistService(IAnimelistRepository animelistRepository, IApplicationUserRepository applicationUserRepository)
         {
             this.animelistRepository = animelistRepository;
+            this.applicationUserRepository = applicationUserRepository;
         }
-        public async Task<IEnumerable<AnimelistViewModel>> GetAnimelistAsync(string userId)
+        public async Task<IEnumerable<AnimelistViewModel>> GetAnimelistAsync(string username)
         {
+            string? userId = await applicationUserRepository.GetUserIdByUsernameAsync(username);
+            
+            if (userId == null)
+            {
+                return Enumerable.Empty<AnimelistViewModel>();
+            }
+
             IEnumerable<AnimelistViewModel> userAnimelist = await this.animelistRepository
                 .GetAllAttached()
                 .Include(au => au.Anime)
