@@ -2,6 +2,8 @@ namespace AniTrack.Web
 {
     using AniTrack.Data.Models;
     using AniTrack.Data.Repository.Interface;
+    using AniTrack.Data.Seeding;
+    using AniTrack.Data.Seeding.Interfaces;
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.Infrastructure.Extensions;
     using Data;
@@ -30,11 +32,13 @@ namespace AniTrack.Web
                 {
                     ConfigureIdentity(builder.Configuration, options);
                 })
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AniTrackDbContext>();
 
          
             builder.Services.AddRepositories(typeof(IAnimeRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IAnimeService).Assembly);
+            builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
 
             builder.Services.AddControllersWithViews();
 
@@ -59,6 +63,8 @@ namespace AniTrack.Web
 
             app.UseRouting();
 
+            app.SeedDefaultIdentity();
+
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -80,6 +86,7 @@ namespace AniTrack.Web
             identityOptions.SignIn.RequireConfirmedAccount = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedAccount");
             identityOptions.SignIn.RequireConfirmedEmail = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedEmail");
             identityOptions.SignIn.RequireConfirmedPhoneNumber = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedPhoneNumber");
+            identityOptions.User.RequireUniqueEmail = configurationManager.GetValue<bool>($"IdentityConfig:User:RequireUniqueEmail");
 
         }
     }

@@ -58,6 +58,13 @@ namespace AniTrack.Web.Areas.Identity.Pages.Account
         public class InputModel
         {
             /// <summary>
+            /// Added Username property to InputModel
+            /// </summary>
+            [Required]
+            [Display(Name = "Username")]
+            public string Username { get; set; }
+
+            /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
@@ -101,7 +108,7 @@ namespace AniTrack.Web.Areas.Identity.Pages.Account
             {
                 ApplicationUser user = CreateUser();
 
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.Username, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
 
                 IdentityResult result = await _userManager.CreateAsync(user, Input.Password);
@@ -118,7 +125,7 @@ namespace AniTrack.Web.Areas.Identity.Pages.Account
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
             }
-
+  
             // If we got this far, something failed, redisplay form
             return Page();
         }
