@@ -45,7 +45,12 @@
             <strong>Genres:</strong>
             @if (Model.Genres != null && Model.Genres.Any())
             {
-                @string.Join(", ", Model.Genres.Select(g => g.Name))
+                @foreach (var genre in Model.Genres)
+                {
+                    <a asp-controller="Genre" asp-action="Index" asp-route-genreName="@genre.Name" class="badge bg-primary me-2">
+                        @genre.Name
+                    </a>
+                }
             }
             else
             {

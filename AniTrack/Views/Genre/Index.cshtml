@@ -1,0 +1,38 @@
+﻿@model AniTrack.Web.ViewModels.Home.GenreViewModel
+
+@{
+    ViewData["Title"] = $"{Model.Genre.Name} Animes";
+    var blueColor = "#0d6efd"; // Use your actual title color if different
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4" style="color:@blueColor;">@Model.Genre.Name Animes</h1>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var anime in Model.Animes)
+        {
+            <div class="col">
+                <div class="card h-100 shadow-sm p-3" style="background-color: #111;">
+                    <h5 class="card-title text-center mb-3">
+                        <a asp-controller="Anime" asp-action="Details" asp-route-id="@anime.Id" class="text-decoration-none" style="color:@blueColor;">
+                            @anime.Title
+                        </a>
+                    </h5>
+                    <div class="text-center mb-2" style="font-size: 1rem; color:@blueColor;">
+                        @anime.AirDate
+                        @if (!string.IsNullOrWhiteSpace(anime.EndDate))
+                        {
+                            <span> - @anime.EndDate</span>
+                        }
+                        <span> | @anime.Episodes episodes</span>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a asp-controller="Anime" asp-action="Details" asp-route-id="@anime.Id">
+                            <img src="@anime.ImageUrl" class="card-img-bottom" alt="@anime.Title" style="max-width: 220px; max-height: 300px; border-radius: 8px; object-fit: cover;" />
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

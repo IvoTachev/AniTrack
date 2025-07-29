@@ -1,0 +1,23 @@
+﻿@model AniTrack.Web.ViewModels.Anime.SearchAnimeViewModel
+
+@{
+    ViewData["Title"] = "Search Anime";
+}
+
+<div class="container mt-5">
+    <h1 class="text-center mb-4">Search Anime</h1>
+    <form asp-controller="Anime" asp-action="Search" method="get" class="d-flex justify-content-center mb-5">
+        <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control form-control-lg w-50" placeholder="Type anime name, genre, or keyword..." />
+        <button type="submit" class="btn btn-primary btn-lg ms-3">Search</button>
+    </form>
+
+    <h2 class="mb-3">Genres</h2>
+    <div class="d-flex flex-wrap gap-3">
+        @foreach (var genre in Model.Genres)
+        {
+            <a asp-controller="Anime" asp-action="Search" asp-route-searchTerm="@genre.Name" class="btn btn-outline-secondary btn-lg">
+                @genre.Name (@genre.AnimesGenre.Count)
+            </a>
+        }
+    </div>
+</div>
