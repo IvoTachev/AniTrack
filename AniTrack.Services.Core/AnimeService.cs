@@ -11,16 +11,19 @@
     {
         private readonly IAnimeRepository animeRepository;
         private readonly IAnimeGenreRepository animeGenreRepository;
-        
-        public AnimeService(IAnimeRepository animeRepository, IAnimeGenreRepository animeGenreRepository)
+        private readonly IGenreRepository genreRepository;
+
+        public AnimeService(IAnimeRepository animeRepository,
+            IAnimeGenreRepository animeGenreRepository, IGenreRepository genreRepository)
         {
             this.animeRepository = animeRepository;
             this.animeGenreRepository = animeGenreRepository;
+            this.genreRepository = genreRepository;
         }
         public async Task<IEnumerable<TopAnimesViewModel>> GetTopAnimesAsync()
         {
             IEnumerable<TopAnimesViewModel> topAnimes = await this.animeRepository
-                .GetAllAttached()  
+                .GetAllAttached()
                 .AsNoTracking()
                 .OrderByDescending(a => a.UserWatchlists.Count(uw => uw.IsDeleted == false)) //UserWatchlists is a collection of users who have watched this anime. Higher count = more popular
                 .ThenByDescending(a => a.Title)
@@ -40,7 +43,7 @@
             {
                 Title = inputModel.Title,
                 Episodes = inputModel.Episodes,
-                AirDate = DateOnly.ParseExact(inputModel.AirDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None), 
+                AirDate = DateOnly.ParseExact(inputModel.AirDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 EndDate = string.IsNullOrEmpty(inputModel.EndDate) ? null : DateOnly.ParseExact(inputModel.EndDate, ApplicationDateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None),
                 Synopsis = inputModel.Synopsis,
                 ImageUrl = inputModel.ImageUrl
@@ -97,7 +100,7 @@
 
         public async Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? id)
         {
-            EditAnimeFormModel? animeDetails = null; 
+            EditAnimeFormModel? animeDetails = null;
             bool isIdValid = int.TryParse(id, out int animeId);
             if (isIdValid)
             {
@@ -154,7 +157,7 @@
             await this.animeRepository.UpdateAsync(editableAnime);
 
             // Get all AnimeGenre entries for this anime, including deleted ones
-            List<AnimeGenre> allGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId,true);   
+            List<AnimeGenre> allGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, true);
 
             // Mark genres as deleted if not in selected
             foreach (AnimeGenre ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
@@ -234,7 +237,7 @@
             }
 
             await this.animeRepository.DeleteAsync(animeForDelete);
-   
+
             return true;
         }
 
@@ -301,7 +304,7 @@
             }
 
             Anime? animeForDelete = await this.animeRepository.GetByIdAsync(animeId);
-            
+
             if (animeForDelete == null)
             {
                 return false;
@@ -310,14 +313,35 @@
             // Remove all related AnimeGenre entries (including soft-deleted)
             List<AnimeGenre> relatedGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, true);
 
-           await this.animeGenreRepository.HardDeleteList(relatedGenres);
+            await this.animeGenreRepository.HardDeleteList(relatedGenres);
 
             // Remove the anime itself
-          await this.animeRepository.HardDeleteAsync(animeForDelete);
+            await this.animeRepository.HardDeleteAsync(animeForDelete);
 
             return true;
         }
 
-     
+        public async Task<SearchAnimeViewModel> SearchAnimeByWordAsync(string? searchTerm)
+        {
+            SearchAnimeViewModel viewModel = new SearchAnimeViewModel
+            {
+                SearchTerm = searchTerm,
+                Genres = await this.genreRepository.GetAllGenresWithCountAsync(),
+                SearchResults = new List<Anime>()
+            };
+            if (searchTerm != null)
+            {
+                List<Anime> searchedAnimes = await this.animeRepository
+                    .GetAllAttached()
+                    .AsNoTracking()
+                    .Where(a => a.Title.ToLower().Contains(searchTerm.ToLower()))
+                    .ToListAsync();
+                if (searchedAnimes.Count > 0)
+                {
+                    viewModel.SearchResults = searchedAnimes;
+                }
+            }
+            return viewModel;
+        }
     }
 }

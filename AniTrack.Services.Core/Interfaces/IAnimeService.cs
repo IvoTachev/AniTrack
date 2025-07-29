@@ -21,5 +21,7 @@
 
         Task<DeleteAnimeViewModel?> GetAnimeDetailsForRestoreByIdAsync(string? id);
         Task<bool> RestoreAnimeAsync(string? id);
+
+        Task<SearchAnimeViewModel> SearchAnimeByWordAsync(string? searchTerm);
     }
 }

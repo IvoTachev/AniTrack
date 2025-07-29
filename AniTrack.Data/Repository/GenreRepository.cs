@@ -4,6 +4,7 @@
     using AniTrack.Data.Repository.Interface;
     using Microsoft.EntityFrameworkCore;
     using System;
+    using System.Collections.Generic;
     using System.Threading.Tasks;
 
     public class GenreRepository : BaseRepository<Genre, int>, IGenreRepository
@@ -11,6 +12,13 @@
         public GenreRepository(AniTrackDbContext dbContext)
            : base(dbContext)
         {
+        }
+
+        public async Task<List<Genre>> GetAllGenresWithCountAsync()
+        {
+            return await this.dbSet
+                .Include(g => g.AnimesGenre)
+                .ToListAsync();
         }
 
         public async Task<Genre?> GetByNameAsync(string name)

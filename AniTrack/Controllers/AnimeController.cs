@@ -6,7 +6,7 @@
     using Services.Core.Interfaces;
     using System.Threading.Tasks;
     using static ViewModels.ValidationMessages.Anime;
-   
+
 
     public class AnimeController : BaseController
     {
@@ -83,7 +83,7 @@
         public async Task<IActionResult> Details(string? id)
         {
             try
-            {   
+            {
                 AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
                 if (animeDetails == null)
                 {
@@ -189,7 +189,7 @@
         {
             try
             {
-                if(!this.ModelState.IsValid)
+                if (!this.ModelState.IsValid)
                 {
                     return this.RedirectToAction(nameof(Index));
                 }
@@ -250,7 +250,7 @@
                     //TODO: Add a notification for unsuccessful restoration
                     return this.RedirectToAction(nameof(Index));
                 }
-                
+
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
             catch (Exception ex)
@@ -261,5 +261,21 @@
             }
         }
 
+        [AllowAnonymous]
+        [HttpGet]
+
+        public async Task<IActionResult> Search(string? searchTerm)
+        {
+            try
+            {
+                SearchAnimeViewModel searchResult = await this.animeService.SearchAnimeByWordAsync(searchTerm);
+                return this.View(searchResult);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
     }
 }
