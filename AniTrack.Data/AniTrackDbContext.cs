@@ -16,6 +16,7 @@
         public virtual DbSet<Genre> Genres { get; set; } = null!;
         public virtual DbSet<AnimeGenre> AnimesGenres { get; set; } = null!;
         public virtual DbSet<UserAnime> UsersAnimes { get; set; } = null!;
+        public virtual DbSet<AnimeReview> AnimeReviews { get; set; } = null!;
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

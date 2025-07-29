@@ -4,6 +4,7 @@ using AniTrack.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AniTrack.Data.Migrations
 {
     [DbContext(typeof(AniTrackDbContext))]
-    partial class AniTrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250729151302_AnimeReviewAddedAndSeeded")]
+    partial class AnimeReviewAddedAndSeeded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

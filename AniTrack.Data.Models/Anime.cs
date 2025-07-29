@@ -25,5 +25,7 @@
         public ICollection<AnimeGenre> AnimeGenres { get; set; } = new List<AnimeGenre>();
 
         public virtual ICollection<UserAnime> UserWatchlists { get; set; } = new List<UserAnime>();
+
+        public virtual ICollection<AnimeReview> Reviews { get; set; } = new List<AnimeReview>();
     }
 }

@@ -61,7 +61,11 @@
             string? adminUserPassword = this.configuration["UserSeed:TestAdmin:Password"];
             string? adminUserName = this.configuration["UserSeed:TestAdmin:Username"];
 
-            if(testUserEmail == null || testUserPassword == null || testUserName == null ||
+            // Explicit IDs for seeding
+            string testUserId = this.configuration["UserSeed:TestUser:Id"] ?? "test-user-id";
+            string adminUserId = this.configuration["UserSeed:TestAdmin:Id"] ?? "admin-user-id";
+
+            if (testUserEmail == null || testUserPassword == null || testUserName == null ||
                adminUserEmail == null || adminUserPassword == null || adminUserName == null)
             {
                 throw new InvalidOperationException("User seed configuration is missing or incomplete.");
@@ -69,7 +73,10 @@
             ApplicationUser? userSeeded = await this.userManager.FindByNameAsync(testUserName);
             if (userSeeded == null)
             {
-                ApplicationUser user = new ApplicationUser();
+                ApplicationUser user = new ApplicationUser
+                {
+                    Id = testUserId // Set explicit Id
+                };
 
                 await this.userStore.SetUserNameAsync(user, testUserName, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(user, testUserEmail, CancellationToken.None);
@@ -83,8 +90,10 @@
             ApplicationUser? adminSeeded = await this.userManager.FindByNameAsync(adminUserName);
             if (adminSeeded == null)
             {
-
-                ApplicationUser adminUser = new ApplicationUser();
+                ApplicationUser adminUser = new ApplicationUser
+                {
+                    Id = adminUserId // Set explicit Id
+                };
 
                 await this.userStore.SetUserNameAsync(adminUser, adminUserName, CancellationToken.None);
                 await this.emailStore.SetEmailAsync(adminUser, adminUserEmail, CancellationToken.None);
@@ -94,9 +103,7 @@
                     throw new InvalidOperationException($"Failed to create user {adminUserName}");
                 }
                 result = await this.userManager.AddToRoleAsync(adminUser, AdminRoleName);
-
             }
-
         }
 
         private IUserEmailStore<ApplicationUser> GetEmailStore()

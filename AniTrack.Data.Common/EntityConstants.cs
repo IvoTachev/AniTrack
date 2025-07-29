@@ -18,5 +18,12 @@
         {
             public const int GenreNameMaxLength = 50; // Max length for Genre names
         }
+
+        public static class AnimeReview
+        {
+            public const int ReviewContentMinLength = 10; // Min length for review content
+            public const int ReviewContentMaxLength = 2000; // Max length for review content
+            public const string CreatedOnDefaultValue = "GETUTCDATE()"; // Default value for CreatedOn property
+        }
     }
 }
