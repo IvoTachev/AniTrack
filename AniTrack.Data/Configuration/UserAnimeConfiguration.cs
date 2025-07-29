@@ -15,7 +15,7 @@
             // Relation between UserAnime and IdentityUser 
             entity
                 .HasOne(ua => ua.User)
-                .WithMany()
+                .WithMany(u => u.Animelist)
                 .HasForeignKey(ua => ua.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 

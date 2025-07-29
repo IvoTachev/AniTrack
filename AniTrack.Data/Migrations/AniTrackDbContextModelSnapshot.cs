@@ -69,7 +69,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Animes", t =>
+                    b.ToTable("Animes", null, t =>
                         {
                             t.HasComment("Anime series in the system");
                         });
@@ -207,7 +207,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasIndex("GenreId");
 
-                    b.ToTable("AnimesGenres", t =>
+                    b.ToTable("AnimesGenres", null, t =>
                         {
                             t.HasComment("Represents the relationship between Anime and Genre in the AniTrack database.");
                         });
@@ -406,7 +406,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Genres", t =>
+                    b.ToTable("Genres", null, t =>
                         {
                             t.HasComment("Represents a Genre in the AniTrack database.");
                         });
@@ -542,7 +542,7 @@ namespace AniTrack.Data.Migrations
 
                     b.HasIndex("AnimeId");
 
-                    b.ToTable("UsersAnimes", t =>
+                    b.ToTable("UsersAnimes", null, t =>
                         {
                             t.HasComment("Represents User Watchlist relation in database");
                         });

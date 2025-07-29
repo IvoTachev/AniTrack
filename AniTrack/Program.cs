@@ -1,10 +1,10 @@
 namespace AniTrack.Web
 {
+    using AniTrack.Data.Models;
     using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.Infrastructure.Extensions;
     using Data;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class Program
@@ -25,7 +25,7 @@ namespace AniTrack.Web
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services
-                .AddDefaultIdentity<IdentityUser>(options => 
+                .AddDefaultIdentity<ApplicationUser>(options => 
                 {
                     options.SignIn.RequireConfirmedAccount = false;
                     options.SignIn.RequireConfirmedEmail = false;

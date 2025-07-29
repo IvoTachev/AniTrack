@@ -43,6 +43,7 @@
         public async Task<bool> AddAnimeToUserAnimelistAsync(string? animeId, string? userId)
         {
             bool result = false;
+            
             if (animeId != null && userId != null)
             {
                 bool isAnimeIdValid = int.TryParse(animeId, out int validAnimeId);

@@ -1,14 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
-namespace AniTrack.Data.Models
+﻿namespace AniTrack.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
+
     [Comment("Represents User Watchlist relation in database")]
     public class UserAnime
     {
         [Comment("Foreign Key reference to AspNetUser")]
         public string UserId { get; set; } = null!;
-        public virtual IdentityUser User { get; set; } =null!;
+        public virtual ApplicationUser User { get; set; } = null!;
         [Comment("Foreign Key reference to Anime")]
         public int AnimeId { get; set; }
         public virtual Anime Anime { get; set; } = null!;

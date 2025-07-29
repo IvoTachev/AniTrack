@@ -8,12 +8,14 @@
     using Services.Core.Interfaces;
     using System.Threading.Tasks;
     using static ViewModels.ValidationMessages.Anime;
+    using System.Net.Http.Json;
 
     public class AnimeController : BaseController
     {
 
         private readonly IAnimeService animeService;
         private readonly IAnimelistService animelistService;
+
         public AnimeController(IAnimeService animeService, IAnimelistService animelistService)
         {
             this.animeService = animeService;
@@ -252,5 +254,6 @@
                 return this.RedirectToAction(nameof(Index));
             }
         }
+
     }
 }

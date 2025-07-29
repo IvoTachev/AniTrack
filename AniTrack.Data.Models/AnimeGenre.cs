@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace AniTrack.Data.Models
+﻿namespace AniTrack.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
+
     [Comment("Represents the relationship between Anime and Genre in the AniTrack database.")]
     public class AnimeGenre
     {

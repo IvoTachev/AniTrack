@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace AniTrack.Data.Models
+﻿namespace AniTrack.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
+
     [Comment("Represents a Genre in the AniTrack database.")]
     public class Genre
     {

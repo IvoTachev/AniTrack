@@ -5,7 +5,7 @@
     using Models;
     using System.Reflection;
 
-    public class AniTrackDbContext : IdentityDbContext
+    public class AniTrackDbContext : IdentityDbContext<ApplicationUser>
     {
         public AniTrackDbContext(DbContextOptions<AniTrackDbContext> options)
             : base(options)

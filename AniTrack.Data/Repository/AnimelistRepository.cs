@@ -17,7 +17,7 @@
         {
             return this
                 .GetAllAttached()
-                .SingleOrDefault(ua => ua.UserId.ToLower() == userId.ToLower() &&
+                .SingleOrDefault(ua => ua.UserId.ToString().ToLower() == userId.ToLower() &&
                                       ua.AnimeId.ToString().ToLower() == animeId.ToLower());
         }
 
@@ -25,14 +25,14 @@
         {
             return this
                .GetAllAttached()
-               .SingleOrDefaultAsync(ua => ua.UserId.ToLower() == userId.ToLower() &&
+               .SingleOrDefaultAsync(ua => ua.UserId.ToString().ToLower() == userId.ToLower() &&
                                      ua.AnimeId.ToString().ToLower() == animeId.ToLower());
         }
         public bool Exists(string userId, string animeId)
         {
             return this
                 .GetAllAttached()
-                .Any(ua => ua.UserId.ToLower() == userId.ToLower() &&
+                .Any(ua => ua.UserId.ToString().ToLower() == userId.ToLower() &&
                                       ua.AnimeId.ToString().ToLower() == animeId.ToLower());
         }
 
@@ -40,7 +40,7 @@
         {
             return this
                 .GetAllAttached()
-                .AnyAsync(ua => ua.UserId.ToLower() == userId.ToLower() &&
+                .AnyAsync(ua => ua.UserId.ToString().ToLower() == userId.ToLower() &&
                                       ua.AnimeId.ToString().ToLower() == animeId.ToLower());
         }
   
