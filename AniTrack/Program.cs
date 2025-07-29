@@ -5,6 +5,7 @@ namespace AniTrack.Web
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.Infrastructure.Extensions;
     using Data;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
     public class Program
@@ -27,16 +28,7 @@ namespace AniTrack.Web
             builder.Services
                 .AddDefaultIdentity<ApplicationUser>(options => 
                 {
-                    options.SignIn.RequireConfirmedAccount = false;
-                    options.SignIn.RequireConfirmedEmail = false;
-                    options.SignIn.RequireConfirmedPhoneNumber = false;
-
-                    options.Password.RequiredLength = 3;
-                    options.Password.RequireNonAlphanumeric = false;
-                    options.Password.RequireDigit = false;
-                    options.Password.RequireLowercase = false;
-                    options.Password.RequireUppercase = false;
-                    options.Password.RequiredUniqueChars = 0;
+                    ConfigureIdentity(builder.Configuration, options);
                 })
                 .AddEntityFrameworkStores<AniTrackDbContext>();
 
@@ -75,6 +67,20 @@ namespace AniTrack.Web
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void ConfigureIdentity(IConfigurationManager configurationManager, IdentityOptions identityOptions)
+        {
+            identityOptions.Password.RequiredLength = configurationManager.GetValue<int>($"IdentityConfig:Password:RequiredLength");
+            identityOptions.Password.RequireNonAlphanumeric = configurationManager.GetValue<bool>($"IdentityConfig:Password:RequireNonAlphanumeric");
+            identityOptions.Password.RequireDigit = configurationManager.GetValue<bool>($"IdentityConfig:Password:RequireDigit");
+            identityOptions.Password.RequireLowercase = configurationManager.GetValue<bool>($"IdentityConfig:Password:RequireLowercase");
+            identityOptions.Password.RequireUppercase = configurationManager.GetValue<bool>($"IdentityConfig:Password:RequireUppercase");
+            identityOptions.Password.RequiredUniqueChars = configurationManager.GetValue<int>($"IdentityConfig:Password:RequiredUniqueChars");
+            identityOptions.SignIn.RequireConfirmedAccount = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedAccount");
+            identityOptions.SignIn.RequireConfirmedEmail = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedEmail");
+            identityOptions.SignIn.RequireConfirmedPhoneNumber = configurationManager.GetValue<bool>($"IdentityConfig:SignIn:RequireConfirmedPhoneNumber");
+
         }
     }
 }
