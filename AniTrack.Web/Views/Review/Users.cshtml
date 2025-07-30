@@ -6,7 +6,12 @@
 }
 
 <div class="container mt-4">
-    <h2>@Model.AuthorName's reviews</h2>
+    <div class="d-flex align-items-center mb-3" style="gap: 1rem;">
+        <h2 class="mb-0">@Model.AuthorName's reviews</h2>
+        <a href="/Animelist/@Model.AuthorName" class="btn btn-primary">
+            Visit Animelist
+        </a>
+    </div>
     <div class="row flex-column">
         @if (Model.Reviews != null && Model.Reviews.Any())
         {
@@ -15,7 +20,9 @@
                 <div class="card review-card mb-4" style="min-height: 180px;">
                     <div class="row g-0 align-items-center">
                         <div class="col-md-2 d-flex justify-content-center align-items-center">
-                            <img src="@review.AnimeImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                            <a href="/Anime/Details/@review.AnimeId">
+                                <img src="@review.AnimeImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                            </a>
                         </div>
                         <div class="col-md-10">
                             <div class="card-body">
@@ -30,7 +37,11 @@
                                         <span class="recommend-box not-recommended">Not Recommended</span>
                                     }
                                 </h5>
-                                <h6 class="card-subtitle mb-2 review-title">@review.AnimeTitle</h6>
+                                <h6 class="card-subtitle mb-2 review-title">
+                                    <a href="/Anime/Details/@review.AnimeId" style="color: inherit; text-decoration: underline;">
+                                        @review.AnimeTitle
+                                    </a>
+                                </h6>
                                 <p class="card-text review-content">@review.Content</p>
 
                                 @if (User.Identity?.IsAuthenticated == true && User.Identity.Name == Model.AuthorName)

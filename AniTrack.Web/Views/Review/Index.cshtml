@@ -49,12 +49,23 @@
             <div class="card review-card mb-4" style="min-height: 180px;">
                 <div class="row g-0 align-items-center">
                     <div class="col-md-2 d-flex justify-content-center align-items-center">
-                        <img src="@review.AnimeImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                        <a href="/Anime/Details/@review.AnimeId">
+                            <img src="@review.AnimeImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                        </a>
                     </div>
                     <div class="col-md-10">
                         <div class="card-body">
                             <h5 class="card-title">
-                                <span class="review-author">@review.AuthorName</span>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <a href="/Review/Users/@review.AuthorName" class="review-author" style="text-decoration: underline;">
+                                        @review.AuthorName
+                                    </a>
+                                }
+                                else
+                                {
+                                    <span class="review-author">@review.AuthorName</span>
+                                }
                                 @if (review.isAnimeRecommended)
                                 {
                                     <span class="recommend-box recommended">Recommended</span>
@@ -64,7 +75,11 @@
                                     <span class="recommend-box not-recommended">Not Recommended</span>
                                 }
                             </h5>
-                            <h6 class="card-subtitle mb-2 review-title">@review.AnimeTitle</h6>
+                            <h6 class="card-subtitle mb-2 review-title">
+                                <a href="/Anime/Details/@review.AnimeId" style="color: inherit; text-decoration: underline;">
+                                    @review.AnimeTitle
+                                </a>
+                            </h6>
                             <p class="card-text review-content">@review.Content</p>
                         </div>
                     </div>

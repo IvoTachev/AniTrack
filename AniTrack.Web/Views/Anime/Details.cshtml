@@ -120,7 +120,6 @@
         </div>
 
         <!-- Recent Review Card -->
-        
         @if (Model.ReviewDetails != null && !string.IsNullOrWhiteSpace(Model.ReviewDetails.Content))
         {
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0; margin-top: 2rem;">
@@ -129,7 +128,16 @@
             <div class="card review-card mt-4">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <span class="review-author">@Model.ReviewDetails.AuthorName</span>
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <a href="/Review/Users/@Model.ReviewDetails.AuthorName" class="review-author" style="text-decoration: underline;">
+                                @Model.ReviewDetails.AuthorName
+                            </a>
+                        }
+                        else
+                        {
+                            <span class="review-author">@Model.ReviewDetails.AuthorName</span>
+                        }
                         @if (Model.ReviewDetails.isAnimeRecommended)
                         {
                             <span class="recommend-box recommended">Recommended</span>
