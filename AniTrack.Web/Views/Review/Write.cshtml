@@ -1,0 +1,40 @@
+﻿@using AniTrack.Web.ViewModels.Review;
+@model ReviewWriteViewModel;
+
+@{
+    ViewData["Title"] = $"Write a review for {Model.AnimeTitle}";
+}
+
+<h2>Write a review for @Model.AnimeTitle</h2>
+
+<div class="d-flex align-items-start mb-4" style="gap: 2rem;">
+    <div>
+        <img src="@Model.AnimeImageUrl" alt="@Model.AnimeTitle" style="max-width: 220px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.12);" />
+    </div>
+    <form asp-action="Write" asp-route-animeId="@Model.AnimeId" method="post" style="flex: 1;">
+        <div class="mb-3">
+            <label for="Content" class="form-label">Your Review</label>
+            <textarea class="form-control" id="Content" name="Content" rows="6" required>@Model.Content</textarea>
+            <span asp-validation-for="Content" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Do you recommend this anime?</label>
+            <div class="d-flex gap-4 align-items-center mt-2">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="recommendYes" name="isAnimeRecommended" value="true" @(Model.isAnimeRecommended == true ? "checked" : "") required />
+                    <label class="form-check-label" for="recommendYes">Yes</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" id="recommendNo" name="isAnimeRecommended" value="false" @(Model.isAnimeRecommended == false ? "checked" : "") required />
+                    <label class="form-check-label" for="recommendNo">No</label>
+                </div>
+            </div>
+            <span asp-validation-for="isAnimeRecommended" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit Review</button>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

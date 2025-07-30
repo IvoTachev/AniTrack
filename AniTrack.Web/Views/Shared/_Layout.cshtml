@@ -50,7 +50,17 @@
                             <div class="dropdown-menu">
                                 <a class="dropdown-item" asp-area="" asp-controller="Anime" asp-action="Index">Top Animes</a>
                                 <a class="dropdown-item" asp-area="" asp-controller="Anime" asp-action="Search">Search Anime</a>
-                                <a class="dropdown-item" asp-area="" asp-controller="Review" asp-action="Index">Reviews</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Reviews</a>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" asp-area="" asp-controller="Review" asp-action="Index">Anime Reviews</a>
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" asp-area="" asp-controller="Review" asp-action="Users" asp-route-username="@User.Identity.Name">My Reviews</a>
+                                }
                             </div>
                         </li>
                         <li class="nav-item dropdown">

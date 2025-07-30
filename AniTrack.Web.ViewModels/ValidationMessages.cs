@@ -53,5 +53,13 @@ namespace AniTrack.Web.ViewModels
                 }
             }
         }
+
+        public static class AnimeReview
+        {
+            public const string ContentRequiredMessage =  "Your Review can not be empty";
+            public const string ContentMinLengthMessage = "Your Review must be at least 10 characters long.";
+            public const string ContentMaxLengthMessage = "Your Review must be at most 2000 characters long.";
+            public const string RecommendRequiredMessage = "Please select whether you recommend the anime or not";
+        }
     }
 }

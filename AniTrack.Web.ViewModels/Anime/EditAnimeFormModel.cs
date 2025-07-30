@@ -4,7 +4,6 @@
     using static AniTrack.Web.ViewModels.ValidationMessages.Anime;
     using static Common.EntityConstants.Anime;
     using System.Collections.Generic;
-    using AniTrack.Data.Models;
 
     public class EditAnimeFormModel
     {
