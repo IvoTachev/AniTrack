@@ -4,6 +4,6 @@
     public interface IAnimeReviewRepository
         : IRepository<AnimeReview, object>, IAsyncRepository<AnimeReview, object>
     {
-
+        public Task<List<AnimeReview>> GetAllAnimeReviewsAsync();
     }
 }

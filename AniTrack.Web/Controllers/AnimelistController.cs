@@ -4,7 +4,6 @@
     using AniTrack.Web.ViewModels.Animelist;
     using System.Collections.Generic;
     using AniTrack.Services.Core.Interfaces;
-    using Microsoft.AspNetCore.Authorization;
 
     public class AnimelistController : BaseController
     {
