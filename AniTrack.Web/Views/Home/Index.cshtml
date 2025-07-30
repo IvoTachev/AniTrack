@@ -1,20 +1,149 @@
-﻿@{
+﻿@using AniTrack.Web.ViewModels.Home
+@model HomeIndexViewModel
+
+@{
     ViewData["Title"] = "AniTrack";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container" style="margin-top: 2rem;">
+    <div class="row">
+        <!-- Left Section: User Recommended Animes -->
+        <div class="col-md-4">
+            <h2 class="mb-4">User Recommended Animes</h2>
+            <div class="d-flex flex-column gap-3">
+                @if (Model.RecommendedAnimes != null && Model.RecommendedAnimes.Any())
+                {
+                    foreach (var anime in Model.RecommendedAnimes)
+                    {
+                        <div class="card anime-card">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                    <a href="@($"Anime/Details/{anime.AnimeId}")">
+                                        <img src="@anime.ImageUrl" class="img-fluid rounded-start" alt="@anime.AnimeTitle" style="max-height: 120px; max-width: 80px;" />
+                                    </a>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title mb-1">
+                                            <a href="@($"Anime/Details/{anime.AnimeId}")" class="review-author" style="text-decoration: none;">
+                                                @anime.AnimeTitle
+                                            </a>
+                                        </h5>
+                                        <div style="font-size: 0.95rem;">
+                                            <div>Episodes: @anime.Episodes</div>
+                                            <div>Aired on: @(anime.AirDate)</div>
+                                            <div>Ended on: @(anime.EndDate)</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-muted">No recommended animes found.</div>
+                }
+            </div>
+        </div>
+
+        <!-- Middle Section: Empty -->
+        <div class="col-md-4 d-flex align-items-center justify-content-center">
+            <!-- Empty for now -->
+        </div>
+
+        <!-- Right Section: Recent Anime Reviews -->
+        <div class="col-md-4">
+            <h2 class="mb-4">Recent Anime Reviews</h2>
+            <div class="d-flex flex-column gap-3">
+                @if (Model.RecentReviews != null && Model.RecentReviews.Any())
+                {
+                    foreach (var review in Model.RecentReviews)
+                    {
+                        <div class="card review-card">
+                            <div class="row g-0 align-items-center">
+                                <div class="col-4 d-flex justify-content-center align-items-center">
+                                    <a href="@($"Anime/Details/{review.AnimeId}")">
+                                        <img src="@review.ImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 120px; max-width: 80px;" />
+                                    </a>
+                                </div>
+                                <div class="col-8">
+                                    <div class="card-body p-2">
+                                        <h5 class="card-title mb-1">
+                                            <span class="review-author">@review.AuthorName</span>
+                                            @if (review.IsRecommended)
+                                            {
+                                                <span class="recommend-box recommended">Recommended</span>
+                                            }
+                                            else
+                                            {
+                                                <span class="recommend-box not-recommended">Not Recommended</span>
+                                            }
+                                        </h5>
+                                        <h6 class="card-subtitle mb-1 review-title">
+                                            <a href="@($"Anime/Details/{review.AnimeId}")" class="review-title" style="text-decoration: none;">
+                                                @review.AnimeTitle
+                                            </a>
+                                        </h6>
+                                        <p class="card-text review-content mb-1" style="font-size: 0.95rem;">
+                                            @(review.Content != null && review.Content.Length > 100
+                                                ? review.Content.Substring(0, 100) + "..."
+                                                : review.Content)
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="text-muted">No recent reviews found.</div>
+                }
+            </div>
+        </div>
+    </div>
 </div>
 
 <style>
-a,
-a:visited {
-    color: #258cfb;
-}
-
-a:hover,
-a:focus {
-    color: #1565c0; /* Optional: darker blue on hover/focus */
-}
+    .review-card {
+        background-color: #111;
+        color: #f5f5f5;
+        min-height: 120px;
+        padding: 0.5rem 0.5rem;
+    }
+    .review-author {
+        color: #1565c0;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+    .review-title {
+        color: #2196f3;
+        font-weight: bold;
+        font-size: 1rem;
+    }
+    .recommend-box {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 6px;
+        font-size: 0.95em;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+    .recommended {
+        background-color: #2ecc40;
+        color: #fff;
+        border: 1px solid #27ae60;
+    }
+    .not-recommended {
+        background-color: #e74c3c;
+        color: #fff;
+        border: 1px solid #c0392b;
+    }
+    .anime-card {
+        background-color: #111;
+        color: #f5f5f5;
+        min-height: 120px;
+        padding: 0.5rem 0.5rem;
+    }
 </style>
