@@ -29,24 +29,8 @@
         public async Task<IActionResult> Index(int page = 1)
         {
             const int pageSize = 10;
-            List<TopAnimesViewModel> allAnimes = (await animeService.GetTopAnimesAsync()).ToList(); // Get all animes, ordered as needed
-
-            int totalAnimes = allAnimes.Count;
-            int totalPages = (int)Math.Ceiling(totalAnimes / (double)pageSize);
-
-            List<TopAnimesViewModel> pagedAnimes = allAnimes
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            AnimePageViewModel ViewModel = new AnimePageViewModel
-            {
-                Animes = pagedAnimes,
-                CurrentPage = page,
-                TotalPages = totalPages
-            };
-
-            return View(ViewModel);
+            AnimePageViewModel viewModel = await animeService.GetPagedAnimesAsync(page, pageSize);
+            return View(viewModel);
         }
 
         [Authorize(Roles = "Admin")]

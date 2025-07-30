@@ -343,5 +343,24 @@
             }
             return viewModel;
         }
+
+        public async Task<AnimePageViewModel> GetPagedAnimesAsync(int page, int pageSize)
+        {
+            List<TopAnimesViewModel> allAnimes = (await GetTopAnimesAsync()).ToList();
+            int totalAnimes = allAnimes.Count;
+            int totalPages = (int)Math.Ceiling(totalAnimes / (double)pageSize);
+
+            var pagedAnimes = allAnimes
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return new AnimePageViewModel
+            {
+                Animes = pagedAnimes,
+                CurrentPage = page,
+                TotalPages = totalPages
+            };
+        }
     }
 }

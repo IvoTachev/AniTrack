@@ -23,5 +23,7 @@
         Task<bool> RestoreAnimeAsync(string? id);
 
         Task<SearchAnimeViewModel> SearchAnimeByWordAsync(string? searchTerm);
+
+        Task<AnimePageViewModel> GetPagedAnimesAsync(int page, int pageSize);
     }
 }

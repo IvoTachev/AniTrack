@@ -1,0 +1,49 @@
+﻿@using AniTrack.Web.ViewModels.Review;
+@model ReviewPageViewModel
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<div class="container mt-4">
+    <h2>Reviews</h2>
+    <div class="row flex-column">
+        @foreach (var review in Model.Reviews)
+        {
+            <div class="card mb-4" style="min-height: 180px;">
+                <div class="row g-0 align-items-center">
+                    <div class="col-md-2 d-flex justify-content-center align-items-center">
+                        <img src="@review.ImageUrl" class="img-fluid rounded-start" alt="@review.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                    </div>
+                    <div class="col-md-10">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                @review.AuthorName -
+                                @(review.isAnimeRecommended ? "Recommends" : "Not Recommends")
+                            </h5>
+                            <h6 class="card-subtitle mb-2 text-muted">@review.AnimeTitle</h6>
+                            <p class="card-text">@review.Content</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <nav aria-label="Review pagination">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(Model.CurrentPage > 1 ? "" : "disabled")">
+                <a class="page-link" href="?pageIndex=@(Model.CurrentPage - 1)">Previous</a>
+            </li>
+            @for (int i = 1; i <= Model.TotalPages; i++)
+            {
+                <li class="page-item @(i == Model.CurrentPage ? "active" : "")">
+                    <a class="page-link" href="?pageIndex=@i">@i</a>
+                </li>
+            }
+            <li class="page-item @(Model.CurrentPage < Model.TotalPages ? "" : "disabled")">
+                <a class="page-link" href="?pageIndex=@(Model.CurrentPage + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
