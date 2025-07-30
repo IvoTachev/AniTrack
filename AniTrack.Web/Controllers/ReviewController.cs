@@ -26,7 +26,7 @@
 
         [HttpGet("Review/Users/{username}")]
 
-        public async Task<IActionResult> Users(string username,int page = 1)
+        public async Task<IActionResult> Users(string username, int page = 1)
         {
             if (username == null)
             {
@@ -34,7 +34,7 @@
             }
 
             const int pageSize = 5;
-            ReviewPageViewModel viewModel = await reviewService.GetUserReviewsPagedAsync(username, page, pageSize);
+            ReviewUserPageViewModel viewModel = await reviewService.GetUserReviewsPagedAsync(username, page, pageSize);
 
             string? currentUsername = User.Identity?.Name;
 
@@ -78,5 +78,55 @@
             }
         }
 
+        [HttpGet("Review/Edit/{animeId}/{authorId}")]
+        public async Task<IActionResult> Edit(string animeId, string authorId)
+        {
+            string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != authorId)
+            {
+                return Forbid();
+            }
+            ReviewEditViewModel? viewModel = await this.reviewService.GetEditFormAsync(animeId, authorId);
+
+            if (viewModel == null || viewModel.AnimeTitle == string.Empty)
+            {
+                return NotFound();
+            }
+            return View(viewModel);
+
+
+        }
+
+        [HttpPost("Review/Edit/{animeId}/{authorId}")]
+        public async Task<IActionResult> Edit(int animeId, string authorId, ReviewEditViewModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+            string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (currentUserId != authorId)
+            {
+                return Forbid();
+            }
+            try
+            {
+                bool isEdited = await this.reviewService.EditReviewAsync(inputModel);
+                if (isEdited)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    return NotFound();
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+
+                return this.RedirectToAction(nameof(Index));
+            }
+        }
     }
 }

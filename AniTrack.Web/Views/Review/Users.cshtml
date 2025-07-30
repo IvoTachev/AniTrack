@@ -1,5 +1,5 @@
 ﻿@using AniTrack.Web.ViewModels.Review;
-@model ReviewPageViewModel
+@model ReviewUserPageViewModel
 
 @{
     ViewData["Title"] = $"{@Model.AuthorName}'s reviews";
@@ -32,6 +32,17 @@
                                 </h5>
                                 <h6 class="card-subtitle mb-2 review-title">@review.AnimeTitle</h6>
                                 <p class="card-text review-content">@review.Content</p>
+
+                                @if (User.Identity?.IsAuthenticated == true && User.Identity.Name == Model.AuthorName)
+                                {
+                                    <a class="btn btn-warning mt-2"
+                                       asp-controller="Review"
+                                       asp-action="Edit"
+                                       asp-route-animeId="@review.AnimeId"
+                                       asp-route-authorId="@Model.AuthorId">
+                                        Edit
+                                    </a>
+                                }
                             </div>
                         </div>
                     </div>

@@ -69,11 +69,10 @@
             try
             {
                 AnimeDetailsWithReviewViewModel? animeDetailsWithReview = await this.animeService.GetAnimeDetailsWithReviewViewModelAsync(id);
-                //AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
                 if (animeDetailsWithReview == null || animeDetailsWithReview.AnimeDetails == null)
                 {
-                    //Not found view
-                    return this.View("NotFoundError");
+                    // Return 404 Not Found
+                    return NotFound();
                 }
 
                 bool isInAnimelist = false;
@@ -106,8 +105,8 @@
                 EditAnimeFormModel? editAnimeModel = await this.animeService.GetAnimeDetailsByIdAsync(id);
                 if (editAnimeModel == null)
                 {
-                    //Not found view
-                    return this.View("NotFoundError");
+                    // Return 404 Not Found
+                    return NotFound();
                 }
 
                 return this.View(editAnimeModel);
@@ -132,8 +131,8 @@
                 bool isEdited = await this.animeService.EditAnimeAsync(inputModel);
                 if (!isEdited)
                 {
-                    //Not found view
-                    return this.View("NotFoundError");
+                    // Return 404 Not Found
+                    return NotFound();
                 }
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
@@ -155,8 +154,8 @@
                 DeleteAnimeViewModel? animeDetails = await this.animeService.GetAnimeDetailsForDeleteByIdAsync(id);
                 if (animeDetails == null)
                 {
-                    //Not found view
-                    return this.View("NotFoundError");
+                    // Return 404 Not Found
+                    return NotFound();
                 }
                 return this.View(animeDetails);
             }
@@ -205,8 +204,8 @@
                 DeleteAnimeViewModel? animeDetails = await this.animeService.GetAnimeDetailsForRestoreByIdAsync(id);
                 if (animeDetails == null)
                 {
-                    //Not found view
-                    return this.View("NotFoundError");
+                    // Return 404 Not Found
+                    return NotFound();
                 }
                 return this.View(animeDetails);
             }

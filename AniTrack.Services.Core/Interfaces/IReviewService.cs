@@ -7,10 +7,14 @@
 
         Task<ReviewPageViewModel> GetAllReviewsPagedAsync(int page, int pageSize);
 
-        Task<ReviewPageViewModel> GetUserReviewsPagedAsync(string username, int page, int pageSize);
+        Task<ReviewUserPageViewModel> GetUserReviewsPagedAsync(string username, int page, int pageSize);
 
         Task<ReviewWriteViewModel> GetWriteFormAsync (string animeId);
 
         Task WriteReviewAsync(ReviewWriteViewModel inputModel, string userId);
+
+        Task<ReviewEditViewModel?> GetEditFormAsync(string animeId,string authordId);
+
+        Task<bool> EditReviewAsync(ReviewEditViewModel inputModel);
     }
 }

@@ -4,6 +4,7 @@
     using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.ViewModels.Review;
+    using Microsoft.EntityFrameworkCore;
 
     public class ReviewService : IReviewService
     {
@@ -46,7 +47,9 @@
             };
         }
 
-        public async Task<ReviewPageViewModel> GetUserReviewsPagedAsync(string username, int page, int pageSize)
+    
+
+        public async Task<ReviewUserPageViewModel> GetUserReviewsPagedAsync(string username, int page, int pageSize)
         {
             List<AnimeReview> allAnimeReviews = await this.reviewRepository
                                                            .GetAllAnimeReviewsAsync();
@@ -66,7 +69,10 @@
             int totalReviews = userAnimeReviewsViewModels.Count;
             int totalPages = (int)Math.Ceiling(totalReviews / (double)pageSize);
 
-            return new ReviewPageViewModel
+            string authorId = allAnimeReviews
+                .FirstOrDefault(r => r.Author.UserName == username)?.AuthorId ?? string.Empty;
+
+            return new ReviewUserPageViewModel
             {
                 Reviews = userAnimeReviewsViewModels
                     .Skip((page - 1) * pageSize)
@@ -74,7 +80,8 @@
                     .ToList(),
                 CurrentPage = page,
                 TotalPages = totalPages,
-                AuthorName = username
+                AuthorName = username,
+                AuthorId = authorId
             };
         }
 
@@ -105,6 +112,56 @@
             };
 
             await this.reviewRepository.AddAsync(newReview);
+        }
+
+        public async Task<ReviewEditViewModel?> GetEditFormAsync(string animeId,string authorId)
+        {
+            ReviewEditViewModel? viewModel = null;
+            int.TryParse(animeId, out int validId);
+            Anime? anime = await this.animeRepository.GetByIdAsync(validId);
+            
+            AnimeReview? review = await this.reviewRepository
+                .GetAllAttached()
+                .Where(r => r.AnimeId.ToString() == animeId && r.AuthorId == authorId)
+                .FirstOrDefaultAsync();
+            //Check if this user has written a review for this anime
+            if (review != null)
+            {
+                viewModel = new ReviewEditViewModel
+                {
+                    AuthorId = authorId,
+                    AnimeId = validId,
+                    AnimeTitle = anime?.Title ?? string.Empty,
+                    AnimeImageUrl = anime?.ImageUrl ?? string.Empty,
+                    Content = review.Content,
+                    isAnimeRecommended = review.isAnimeRecommended,
+                };
+            }
+            return viewModel;
+        }
+
+        public async Task<bool> EditReviewAsync(ReviewEditViewModel inputModel)
+        {
+            //Check if the inputModel is valid
+            if (inputModel == null)
+            {
+                return false;
+            }
+            //Check if the review exists for this anime and author
+            AnimeReview? editableReview = await this.reviewRepository
+                .GetAllAttached()
+                .Where(r => r.AnimeId.ToString() == inputModel.AnimeId.ToString() && r.AuthorId == inputModel.AuthorId)
+                .FirstOrDefaultAsync();
+            //If the review exists, update it
+            if (editableReview != null)
+            {
+                editableReview.Content = inputModel.Content;
+                editableReview.isAnimeRecommended = inputModel.isAnimeRecommended ?? false;
+                await this.reviewRepository.UpdateAsync(editableReview);
+                return true;
+            }
+            //If the review does not exist, return false
+            return false;
         }
     }
 }
