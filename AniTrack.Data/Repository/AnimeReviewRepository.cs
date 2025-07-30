@@ -21,5 +21,14 @@
              .Include(au => au.Author)
              .ToListAsync();
         }
+
+        public async Task<AnimeReview?> GetAnimeReviewByAnimeIdAsync(string? id)
+        {
+              return await this.dbSet
+             .Include(an => an.Anime)
+             .Include(au => au.Author)
+             .OrderByDescending(ar => ar.CreatedOn)
+             .FirstOrDefaultAsync(ar => ar.AnimeId.ToString() == id);
+        }
     }
 }

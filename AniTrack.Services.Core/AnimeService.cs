@@ -2,6 +2,7 @@
 {
     using AniTrack.Data.Models;
     using AniTrack.Data.Repository.Interface;
+    using AniTrack.Web.ViewModels.Review;
     using Interfaces;
     using Microsoft.EntityFrameworkCore;
     using System.Globalization;
@@ -12,13 +13,16 @@
         private readonly IAnimeRepository animeRepository;
         private readonly IAnimeGenreRepository animeGenreRepository;
         private readonly IGenreRepository genreRepository;
+        private readonly IAnimeReviewRepository reviewRepository;
 
         public AnimeService(IAnimeRepository animeRepository,
-            IAnimeGenreRepository animeGenreRepository, IGenreRepository genreRepository)
+            IAnimeGenreRepository animeGenreRepository, IGenreRepository genreRepository,
+            IAnimeReviewRepository reviewRepository)
         {
             this.animeRepository = animeRepository;
             this.animeGenreRepository = animeGenreRepository;
             this.genreRepository = genreRepository;
+            this.reviewRepository = reviewRepository;
         }
         public async Task<IEnumerable<TopAnimesViewModel>> GetTopAnimesAsync()
         {
@@ -115,6 +119,32 @@
                     .SingleOrDefaultAsync();
             }
             return animeDetails;
+        }
+
+        public async Task<AnimeDetailsWithReviewViewModel> GetAnimeDetailsWithReviewViewModelAsync(string? id)
+        {
+           AnimeDetailsViewModel? animeDetails = await GetAnimeDetailsAsync(id);
+           AnimeReview? review = await reviewRepository.GetAnimeReviewByAnimeIdAsync(id);
+           AnimeReviewViewModel? reviewDetails = null;
+           if (review != null)
+           {
+                reviewDetails = new AnimeReviewViewModel()
+                {
+                    AnimeId = review.AnimeId.ToString(),
+                    AnimeTitle = review.Anime.Title,
+                    AnimeImageUrl = review.Anime.ImageUrl,
+                    AuthorName = review.Author.UserName,
+                    Content = review.Content,
+                    isAnimeRecommended = review.isAnimeRecommended
+
+
+                };
+           }
+           return new AnimeDetailsWithReviewViewModel()
+           {
+               AnimeDetails = animeDetails,
+               ReviewDetails = reviewDetails
+           };
         }
 
         public async Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? id)

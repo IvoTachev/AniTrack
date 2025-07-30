@@ -68,8 +68,9 @@
         {
             try
             {
-                AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
-                if (animeDetails == null)
+                AnimeDetailsWithReviewViewModel? animeDetailsWithReview = await this.animeService.GetAnimeDetailsWithReviewViewModelAsync(id);
+                //AnimeDetailsViewModel? animeDetails = await this.animeService.GetAnimeDetailsAsync(id);
+                if (animeDetailsWithReview == null || animeDetailsWithReview.AnimeDetails == null)
                 {
                     //Not found view
                     return this.View("NotFoundError");
@@ -81,12 +82,12 @@
                     string? userId = this.GetUserId();
                     if (userId != null)
                     {
-                        isInAnimelist = await IsAnimeInUserList(userId, animeDetails.Id);
+                        isInAnimelist = await IsAnimeInUserList(userId, animeDetailsWithReview.AnimeDetails.Id);
                     }
                 }
                 ViewBag.IsInAnimelist = isInAnimelist;
 
-                return this.View(animeDetails);
+                return this.View(animeDetailsWithReview);
             }
             catch (Exception e)
             {

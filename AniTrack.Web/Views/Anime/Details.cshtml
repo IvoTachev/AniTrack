@@ -1,29 +1,72 @@
 ﻿@using AniTrack.Web.ViewModels.Anime
 @using static AniTrack.GCommon.ApplicationConstants
-@model AnimeDetailsViewModel
+@model AnimeDetailsWithReviewViewModel
 
 @{
-    ViewData["Title"] = Model.Title;
+    ViewData["Title"] = Model.AnimeDetails.Title;
 }
+
+
+<style>
+    .review-card {
+        background-color: #111;
+        color: #f5f5f5;
+        min-height: 180px;
+        padding: 1.5rem 1.5rem;
+    }
+    .review-author {
+        color: #1565c0;
+        font-weight: bold;
+        font-size: 1.35rem;
+    }
+    .review-title {
+        color: #2196f3;
+        font-weight: bold;
+        font-size: 1.25rem;
+    }
+    .review-content {
+        color: #f5f5f5;
+        font-size: 1.15rem;
+        margin-top: 0.75rem;
+    }
+    .recommend-box {
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 6px;
+        font-size: 1.05em;
+        font-weight: 600;
+        margin-left: 12px;
+    }
+    .recommended {
+        background-color: #2ecc40;
+        color: #fff;
+        border: 1px solid #27ae60;
+    }
+    .not-recommended {
+        background-color: #e74c3c;
+        color: #fff;
+        border: 1px solid #c0392b;
+    }
+</style>
 
 <div class="anime-details-container details-bg" style="display: flex; gap: 2rem; margin-top: 2rem; color: #f5f5f5;">
     <!-- Left Column: Image + Info Boxes -->
     <div style="display: flex; flex-direction: column; align-items: center; min-width: 225px;">
-        <img src="@Model.ImageUrl" alt="@Model.Title" style="width: 225px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 1.5rem;" />
+        <img src="@Model.AnimeDetails.ImageUrl" alt="@Model.AnimeDetails.Title" style="width: 225px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.15); margin-bottom: 1.5rem;" />
 
         @if (User.Identity?.IsAuthenticated == true)
         {
             if (ViewBag.IsInAnimelist == true)
             {
                 <form asp-controller="Animelist" asp-action="Remove" method="post" style="margin-bottom: 1rem;">
-                    <input type="hidden" name="animeId" value="@Model.Id" />
+                    <input type="hidden" name="animeId" value="@Model.AnimeDetails.Id" />
                     <button type="submit" class="btn btn-danger">Remove from my Animelist</button>
                 </form>
             }
             else
             {
                 <form asp-controller="Animelist" asp-action="Add" method="post" style="margin-bottom: 1rem;">
-                    <input type="hidden" name="animeId" value="@Model.Id" />
+                    <input type="hidden" name="animeId" value="@Model.AnimeDetails.Id" />
                     <button type="submit" class="btn btn-success">Add to my Animelist</button>
                 </form>
             }
@@ -31,21 +74,21 @@
 
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb; margin-bottom: 1rem;">
             <strong>Aired:</strong>
-            @Model.AirDate
-            @if (!string.IsNullOrWhiteSpace(Model.EndDate))
+            @Model.AnimeDetails.AirDate
+            @if (!string.IsNullOrWhiteSpace(Model.AnimeDetails.EndDate))
             {
-                <span> to @Model.EndDate</span>
+                <span> to @Model.AnimeDetails.EndDate</span>
             }
         </div>
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb; margin-bottom: 1rem;">
             <strong>Episodes:</strong>
-            @Model.Episodes
+            @Model.AnimeDetails.Episodes
         </div>
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb;">
             <strong>Genres:</strong>
-            @if (Model.Genres != null && Model.Genres.Any())
+            @if (Model.AnimeDetails.Genres != null && Model.AnimeDetails.Genres.Any())
             {
-                @foreach (var genre in Model.Genres)
+                @foreach (var genre in Model.AnimeDetails.Genres)
                 {
                     <a asp-controller="Genre" asp-action="Index" asp-route-genreName="@genre.Name" class="badge bg-primary me-2">
                         @genre.Name
@@ -61,19 +104,45 @@
 
     <!-- Right Column: Title + Synopsis -->
     <div style="flex: 1;">
-        <h1 style="margin-top: 0; color: #fff;">@Model.Title</h1>
+        <h1 style="margin-top: 0; color: #fff;">@Model.AnimeDetails.Title</h1>
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0;">Synopsis</h2>
             @if (User.Identity?.IsAuthenticated == true && User.IsInRole(AdminRoleName))
             {
                 <div>
-                    <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.Id">Edit Contents</a>
-                    <a class="btn btn-danger ms-2" asp-controller="Anime" asp-action="Delete" asp-route-id="@Model.Id">Delete Anime</a>
+                    <a class="btn btn-primary" asp-controller="Anime" asp-action="Edit" asp-route-id="@Model.AnimeDetails.Id">Edit Contents</a>
+                    <a class="btn btn-danger ms-2" asp-controller="Anime" asp-action="Delete" asp-route-id="@Model.AnimeDetails.Id">Delete Anime</a>
                 </div>
             }
         </div>
         <div style="padding: 1rem; border-radius: 6px; border: 1.5px solid #bbb;">
-            @Html.Raw(Model.Synopsis?.Replace("\n", "<br />"))
+            @Html.Raw(Model.AnimeDetails.Synopsis?.Replace("\n", "<br />"))
         </div>
+
+        <!-- Recent Review Card -->
+        
+        @if (Model.ReviewDetails != null && !string.IsNullOrWhiteSpace(Model.ReviewDetails.Content))
+        {
+            <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0; margin-top: 2rem;">
+                The latest user review
+            </h2>
+            <div class="card review-card mt-4">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="review-author">@Model.ReviewDetails.AuthorName</span>
+                        @if (Model.ReviewDetails.isAnimeRecommended)
+                        {
+                            <span class="recommend-box recommended">Recommended</span>
+                        }
+                        else
+                        {
+                            <span class="recommend-box not-recommended">Not Recommended</span>
+                        }
+                    </h5>
+                    <h6 class="card-subtitle mb-2 review-title">@Model.ReviewDetails.AnimeTitle</h6>
+                    <p class="card-text review-content">@Model.ReviewDetails.Content</p>
+                </div>
+            </div>
+        }
     </div>
 </div>

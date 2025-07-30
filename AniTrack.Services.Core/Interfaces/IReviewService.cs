@@ -4,6 +4,7 @@
 
     public interface IReviewService
     {
+
         Task<ReviewPageViewModel> GetAllReviewsPagedAsync(int page, int pageSize);
     }
 }

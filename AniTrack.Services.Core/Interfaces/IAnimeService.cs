@@ -10,7 +10,9 @@
 
         Task<AnimeDetailsViewModel?> GetAnimeDetailsAsync(string? id);
 
-        Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? slug);
+        Task<AnimeDetailsWithReviewViewModel> GetAnimeDetailsWithReviewViewModelAsync(string? id);
+
+        Task<EditAnimeFormModel?> GetAnimeDetailsByIdAsync(string? id);
 
         Task<bool> EditAnimeAsync(EditAnimeFormModel inputModel);
 
