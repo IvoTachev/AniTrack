@@ -1,17 +1,18 @@
 ﻿namespace AniTrack.Web.Areas.Admin.Controllers
 {
-    using AniTrack.Services.Core.Admin;
     using AniTrack.Services.Core.Admin.Interfaces;
     using AniTrack.Web.ViewModels.Admin.Home;
-    using AniTrack.Web.ViewModels.Animelist;
     using Microsoft.AspNetCore.Mvc;
+    using static AniTrack.GCommon.ApplicationConstants;
+    using static AniTrack.GCommon.ExceptionMessages;
     public class HomeController : BaseAdminController
     {
         private readonly IHomeService homeService;
-
-        public HomeController(IHomeService homeService)
+        private readonly ILogger<HomeController> logger;
+        public HomeController(IHomeService homeService, ILogger<HomeController> logger)
         {
             this.homeService = homeService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -30,7 +31,8 @@
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex);
+                this.logger.LogError(ex, "An error occurred while getting animes for restore.");
+                TempData[ErrorMessageKey] = AdminGetAnimesForRestoreErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
         }

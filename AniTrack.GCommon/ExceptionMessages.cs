@@ -26,5 +26,7 @@
         public const string AnimelistRemoveSuccessMessage = "Anime removed from your animelist successfully.";
 
         public const string GenreAnimesRetrieveErrorMessage = "An error occurred while retrieving the animes for this genre. Please try again later.";
+
+        public const string AdminGetAnimesForRestoreErrorMessage = "An error occurred while trying to retrieve the animes for restore. Please try again later.";
     }
 }
