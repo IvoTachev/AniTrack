@@ -62,6 +62,8 @@
                 RecommendedAnimes = recommendedAnimes,
                 RecentReviews = recentReviews
             };
+
+
         }
     }
 }

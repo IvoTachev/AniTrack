@@ -35,7 +35,11 @@ namespace AniTrack.Web
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<AniTrackDbContext>();
 
-         
+            builder.Services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = "/Home/AccessDenied";
+            });
+
             builder.Services.AddRepositories(typeof(IAnimeRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IAnimeService).Assembly);
             builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
@@ -56,17 +60,20 @@ namespace AniTrack.Web
                 app.UseHsts();
             }
 
-            app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
+          
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+         
+
             app.SeedDefaultIdentity();
 
             app.UseAuthorization();
 
+            app.UseStatusCodePagesWithRedirects("/Home/Error?statusCode={0}");
             app.MapControllerRoute(
                 name: "areas",
                 pattern: "{area}/{controller=Home}/{action=Index}/{id?}");
