@@ -11,10 +11,12 @@
     public class AnimelistController : BaseController
     {
         private readonly IAnimelistService animelistService;
+        private readonly ILogger<AnimelistController> logger;
 
-        public AnimelistController(IAnimelistService animelistService)
+        public AnimelistController(IAnimelistService animelistService, ILogger<AnimelistController> logger)
         {
             this.animelistService = animelistService;
+            this.logger = logger;
         }
         [HttpGet]
         [Route("Animelist/{username?}")]
@@ -44,8 +46,9 @@
 
                 return View(userAnimelist); 
             }
-            catch (Exception)
+            catch (Exception ex)
             {  
+                logger.LogError(ex, "Error retrieving animelist for user {Username}", username);
                 TempData[ErrorMessageKey] = AnimelistRetrieveErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
@@ -71,8 +74,9 @@
                 TempData[SuccessMessageKey] = AnimelistAddSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error adding anime {AnimeId} to animelist for user {UserId}", animeId, this.GetUserId());
                 TempData[ErrorMessageKey] = AnimelistAddErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
@@ -97,8 +101,9 @@
                 TempData[SuccessMessageKey] = AnimelistRemoveSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error removing anime {AnimeId} from animelist for user {UserId}", animeId, this.GetUserId());
                 TempData[ErrorMessageKey] = AnimelistRemoveErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }

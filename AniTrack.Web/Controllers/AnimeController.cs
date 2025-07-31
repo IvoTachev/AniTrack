@@ -15,11 +15,13 @@
 
         private readonly IAnimeService animeService;
         private readonly IAnimelistService animelistService;
+        private readonly ILogger<AnimeController> logger;
 
-        public AnimeController(IAnimeService animeService, IAnimelistService animelistService)
+        public AnimeController(IAnimeService animeService, IAnimelistService animelistService, ILogger<AnimeController> logger )
         {
             this.animeService = animeService;
             this.animelistService = animelistService;
+            this.logger = logger;
         }
 
         private async Task<bool> IsAnimeInUserList(string userId, string animeId)
@@ -58,8 +60,9 @@
 
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error occurred while adding anime.");
                 TempData[ErrorMessageKey] = AnimeAddErrorMessage;
                 return this.View(inputModel);
             }
@@ -90,8 +93,9 @@
 
                 return this.View(animeDetailsWithReview);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, "Error occurred while retrieving anime details for AnimeId: {animeId}.", id);
                 TempData[ErrorMessageKey] = AnimeDetailsErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -113,9 +117,9 @@
 
                 return this.View(editAnimeModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Todo: Log the error
+                logger.LogError(ex, "Error occurred while retrieving anime with Id: {animeId} for edit.",id);
                 TempData[ErrorMessageKey] = AnimeEditErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -139,9 +143,9 @@
                 TempData[SuccessMessageKey] = AnimeEditSuccessMessage;
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the error
+                logger.LogError(ex, "Error occurred while editing anime with Id: {animeId}.", inputModel.Id);
                 TempData[ErrorMessageKey] = AnimeEditErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -161,9 +165,9 @@
                 }
                 return this.View(animeDetails);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Todo: Log the error
+                logger.LogError(ex, "Error occurred while retrieving anime with Id: {animeId} for deletion.", id);
                 TempData[ErrorMessageKey] = AnimeDeleteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -190,9 +194,9 @@
                 TempData[SuccessMessageKey] = AnimeDeleteSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the error
+                logger.LogError(ex,"Error occurred while deleting anime with Id: {animeId}.", inputModel.Id);
                 TempData[ErrorMessageKey] = AnimeDeleteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -212,9 +216,9 @@
                 }
                 return this.View(animeDetails);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //Todo: Log the error
+                logger.LogError(ex, "Error occurred while retrieving anime with Id: {animeId} for restoration.", id);
                 TempData[ErrorMessageKey] = AnimeRestoreErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -240,9 +244,9 @@
                 TempData[SuccessMessageKey] = AnimeRestoreSuccessMessage;
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Log the error
+                logger.LogError(ex, "Error occurred while restoring anime with Id: {animeId}.", inputModel.Id);
                 TempData[ErrorMessageKey] = AnimeRestoreErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
@@ -258,8 +262,9 @@
                 SearchAnimeViewModel searchResult = await this.animeService.SearchAnimeByWordAsync(searchTerm);
                 return this.View(searchResult);
             }
-            catch (Exception)
-            {
+            catch (Exception ex)
+            {   
+                logger.LogError(ex, "Error occurred while searching for anime with search term: {searchTerm}.", searchTerm);
                 TempData[ErrorMessageKey] = AnimeSearchErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }

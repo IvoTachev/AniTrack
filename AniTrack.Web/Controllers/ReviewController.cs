@@ -11,10 +11,11 @@
     public class ReviewController : BaseController
     {
         private readonly IReviewService reviewService;
-
-        public ReviewController(IReviewService reviewService)
+        private readonly ILogger<ReviewController> logger;
+        public ReviewController(IReviewService reviewService, ILogger<ReviewController> logger)
         {
             this.reviewService = reviewService;
+            this.logger = logger;
         }
 
         [AllowAnonymous]
@@ -75,8 +76,10 @@
                 await this.reviewService.WriteReviewAsync(inputModel, userId!);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log the error and return an error message
+                logger.LogError(ex, $"Error writing review for AnimeId {animeId} by UserId {userId}");
                 TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
                 return this.View(inputModel);
             }
@@ -131,8 +134,10 @@
                     return this.View(inputModel);
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                // Log the error and return an error message
+                logger.LogError(ex, $"Error editing review for AnimeId {animeId} by UserId {authorId}");
                 TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }

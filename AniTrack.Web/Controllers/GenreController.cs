@@ -10,10 +10,11 @@
     public class GenreController : BaseController
     {
         private readonly IGenreService genreService;
-
-        public GenreController(IGenreService genreService)
+        private readonly ILogger<GenreController> logger;
+        public GenreController(IGenreService genreService, ILogger<GenreController> logger)
         {
             this.genreService = genreService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -30,8 +31,9 @@
                 }
                 return View(genreViewModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                logger.LogError(ex, $"Error retrieving animes for genre: {genreName}");
                 TempData[ErrorMessageKey] = GenreAnimesRetrieveErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
