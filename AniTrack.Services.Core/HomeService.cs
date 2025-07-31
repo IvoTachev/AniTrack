@@ -48,7 +48,7 @@
             List<RecentReviewsViewModel> recentReviews = topReviews
                 .Select(rr => new RecentReviewsViewModel
                 {
-                    AuthorName = rr.Author.UserName,
+                    AuthorName = rr.Author.UserName!,
                     ImageUrl = rr.Anime.ImageUrl,
                     AnimeId = rr.AnimeId.ToString(),
                     AnimeTitle = rr.Anime.Title,

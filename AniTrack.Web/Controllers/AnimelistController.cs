@@ -5,6 +5,9 @@
     using System.Collections.Generic;
     using AniTrack.Services.Core.Interfaces;
 
+    using static AniTrack.GCommon.ApplicationConstants;
+    using static AniTrack.GCommon.ExceptionMessages;
+
     public class AnimelistController : BaseController
     {
         private readonly IAnimelistService animelistService;
@@ -41,9 +44,9 @@
 
                 return View(userAnimelist); 
             }
-            catch (Exception ex)
+            catch (Exception)
             {  
-                Console.WriteLine(ex);
+                TempData[ErrorMessageKey] = AnimelistRetrieveErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
         }
@@ -62,14 +65,15 @@
                 bool result = await this.animelistService.AddAnimeToUserAnimelistAsync(animeId, userId);
                 if (result == false)
                 {
+                    TempData[ErrorMessageKey] = AnimelistAddErrorMessage;
                     return this.RedirectToAction(nameof(Index), "Anime");
                 }
+                TempData[SuccessMessageKey] = AnimelistAddSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
-                
+                TempData[ErrorMessageKey] = AnimelistAddErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
         }
@@ -87,14 +91,15 @@
                 bool result = await this.animelistService.RemoveAnimeFromUserAnimelistAsync(animeId, userId);
                 if (result == false)
                 {
+                    TempData[ErrorMessageKey] = AnimelistRemoveErrorMessage;
                     return this.RedirectToAction(nameof(Index));
                 }
+                TempData[SuccessMessageKey] = AnimelistRemoveSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
-                
+                TempData[ErrorMessageKey] = AnimelistRemoveErrorMessage;
                 return this.RedirectToAction(nameof(Index), "Home");
             }
         }   

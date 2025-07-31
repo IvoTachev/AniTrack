@@ -4,6 +4,8 @@
     using AniTrack.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
+    using static AniTrack.GCommon.ApplicationConstants;
+    using static AniTrack.GCommon.ExceptionMessages;
 
     public class GenreController : BaseController
     {
@@ -28,9 +30,9 @@
                 }
                 return View(genreViewModel);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = GenreAnimesRetrieveErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }

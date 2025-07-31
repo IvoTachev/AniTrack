@@ -5,7 +5,9 @@
     using Microsoft.AspNetCore.Mvc;
     using Services.Core.Interfaces;
     using System.Threading.Tasks;
-    using static ViewModels.ValidationMessages.Anime;
+    using static AniTrack.GCommon.ApplicationConstants;
+    using static AniTrack.GCommon.ExceptionMessages;
+   
 
 
     public class AnimeController : BaseController
@@ -58,7 +60,7 @@
             }
             catch (Exception)
             {
-                this.ModelState.AddModelError(string.Empty, ServiceCreateError);
+                TempData[ErrorMessageKey] = AnimeAddErrorMessage;
                 return this.View(inputModel);
             }
         }
@@ -88,9 +90,9 @@
 
                 return this.View(animeDetailsWithReview);
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = AnimeDetailsErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
 
@@ -111,10 +113,10 @@
 
                 return this.View(editAnimeModel);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Todo: Log the error
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = AnimeEditErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -131,16 +133,16 @@
                 bool isEdited = await this.animeService.EditAnimeAsync(inputModel);
                 if (!isEdited)
                 {
-                    // Return 404 Not Found
-                    return NotFound();
+                    TempData[ErrorMessageKey] = AnimeEditErrorMessage;
+                    return this.RedirectToAction(nameof(Index));
                 }
+                TempData[SuccessMessageKey] = AnimeEditSuccessMessage;
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Log the error
-                Console.WriteLine(ex.Message);
-
+                TempData[ErrorMessageKey] = AnimeEditErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -159,10 +161,10 @@
                 }
                 return this.View(animeDetails);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Todo: Log the error
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = AnimeDeleteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -181,16 +183,17 @@
                 bool deleteResult = await this.animeService.SoftDeleteAnimeAsync(inputModel.Id);
                 if (!deleteResult)
                 {
-                    //TODO: Add a notification for unsuccessful deletion
+                    TempData[ErrorMessageKey] = AnimeDeleteErrorMessage;
                     return this.RedirectToAction(nameof(Index));
                 }
-                //TODO: Add a notification for successful deletion
+
+                TempData[SuccessMessageKey] = AnimeDeleteSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Log the error
-                Console.WriteLine(ex.Message);
+                TempData[ErrorMessageKey] = AnimeDeleteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -209,10 +212,10 @@
                 }
                 return this.View(animeDetails);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //Todo: Log the error
-                Console.WriteLine(e.Message);
+                TempData[ErrorMessageKey] = AnimeRestoreErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -231,16 +234,16 @@
                 bool restoreResult = await this.animeService.RestoreAnimeAsync(inputModel.Id);
                 if (!restoreResult)
                 {
-                    //TODO: Add a notification for unsuccessful restoration
+                    TempData[ErrorMessageKey] = AnimeRestoreErrorMessage;
                     return this.RedirectToAction(nameof(Index));
                 }
-
+                TempData[SuccessMessageKey] = AnimeRestoreSuccessMessage;
                 return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //TODO: Log the error
-                Console.WriteLine(ex.Message);
+                TempData[ErrorMessageKey] = AnimeRestoreErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }
@@ -255,9 +258,9 @@
                 SearchAnimeViewModel searchResult = await this.animeService.SearchAnimeByWordAsync(searchTerm);
                 return this.View(searchResult);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex.Message);
+                TempData[ErrorMessageKey] = AnimeSearchErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }

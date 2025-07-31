@@ -5,6 +5,8 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using System.Security.Claims;
+    using static AniTrack.GCommon.ExceptionMessages;
+    using static AniTrack.GCommon.ApplicationConstants;
 
     public class ReviewController : BaseController
     {
@@ -30,6 +32,7 @@
         {
             if (username == null)
             {
+                TempData[ErrorMessageKey] = ReviewUsersErrorMessage;
                 return RedirectToAction(nameof(Index));
             }
 
@@ -62,18 +65,19 @@
         {
             if (!this.ModelState.IsValid)
             {
+                // Returns view with validation errors
                 return this.View(inputModel);
             }
-            string? userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
             try
             {
-                await this.reviewService.WriteReviewAsync(inputModel, userId);
+                await this.reviewService.WriteReviewAsync(inputModel, userId!);
                 return RedirectToAction(nameof(Index));
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
+                TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
                 return this.View(inputModel);
             }
         }
@@ -84,6 +88,7 @@
             string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != authorId)
             {
+                TempData[ErrorMessageKey] = ReviewWrongAuthorErrorMessage;
                 return Forbid();
             }
             ReviewEditViewModel? viewModel = await this.reviewService.GetEditFormAsync(animeId, authorId);
@@ -92,6 +97,7 @@
             {
                 return NotFound();
             }
+            
             return View(viewModel);
 
 
@@ -102,11 +108,13 @@
         {
             if (!this.ModelState.IsValid)
             {
+                // Returns view with validation errors
                 return this.View(inputModel);
             }
             string? currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (currentUserId != authorId)
             {
+                TempData[ErrorMessageKey] = ReviewWrongAuthorErrorMessage;
                 return Forbid();
             }
             try
@@ -114,17 +122,18 @@
                 bool isEdited = await this.reviewService.EditReviewAsync(inputModel);
                 if (isEdited)
                 {
+                    TempData[SuccessMessageKey] = ReviewEditSuccessMessage;
                     return RedirectToAction(nameof(Index));
                 }
                 else
                 {
-                    return NotFound();
+                    TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
+                    return this.View(inputModel);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                Console.WriteLine(ex);
-
+                TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
             }
         }

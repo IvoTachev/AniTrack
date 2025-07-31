@@ -133,7 +133,7 @@
                     AnimeId = review.AnimeId.ToString(),
                     AnimeTitle = review.Anime.Title,
                     AnimeImageUrl = review.Anime.ImageUrl,
-                    AuthorName = review.Author.UserName,
+                    AuthorName = review.Author.UserName!,
                     Content = review.Content,
                     isAnimeRecommended = review.isAnimeRecommended
 

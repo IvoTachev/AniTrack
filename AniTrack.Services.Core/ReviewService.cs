@@ -23,7 +23,7 @@
                 .OrderByDescending(r => r.CreatedOn)
                 .Select(vm => new AnimeReviewViewModel
             {
-                AuthorName = vm.Author.UserName,
+                AuthorName = vm.Author.UserName!,
                 AnimeId = vm.AnimeId.ToString(),
                 AnimeTitle = vm.Anime.Title,
                 AnimeImageUrl = vm.Anime.ImageUrl,
@@ -58,7 +58,7 @@
                 .OrderByDescending(r => r.CreatedOn)
                 .Select(vm => new AnimeReviewViewModel
             {
-                AuthorName = vm.Author.UserName,
+                AuthorName = vm.Author.UserName!,
                 AnimeId = vm.AnimeId.ToString(),
                 AnimeTitle = vm.Anime.Title,
                 AnimeImageUrl = vm.Anime.ImageUrl,
