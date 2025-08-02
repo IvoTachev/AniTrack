@@ -12,13 +12,17 @@
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="Moq" Version="4.20.72" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit.Analyzers" Version="3.9.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AniTrack.Data.Models\AniTrack.Data.Models.csproj" />
     <ProjectReference Include="..\AniTrack.Data\AniTrack.Data.csproj" />
+    <ProjectReference Include="..\AniTrack.GCommon\AniTrack.GCommon.csproj" />
+    <ProjectReference Include="..\AniTrack.Services.Common\AniTrack.Services.Common.csproj" />
     <ProjectReference Include="..\AniTrack.Services.Core\AniTrack.Services.Core.csproj" />
   </ItemGroup>
 
