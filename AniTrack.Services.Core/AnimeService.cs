@@ -208,11 +208,10 @@
             // Get all AnimeGenre entries for this anime, including deleted ones
             List<AnimeGenre> allGenres = await this.animeGenreRepository.GetByAnimeIdAsync(animeId, true);
 
-            // Mark genres as deleted if not in selected
-            foreach (AnimeGenre ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId) && !ag.IsDeleted))
+            // Hard delete genres not in selected to avoid issues with soft-deleted entries when restoring Animes
+            foreach (AnimeGenre ag in allGenres.Where(ag => !inputModel.SelectedGenreIds.Contains(ag.GenreId)))
             {
-                ag.IsDeleted = true;
-                await this.animeGenreRepository.UpdateAsync(ag);
+                await this.animeGenreRepository.HardDeleteAsync(ag);
             }
 
             // For each selected genre, add or undelete as needed

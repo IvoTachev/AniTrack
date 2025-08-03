@@ -341,7 +341,7 @@
                 Synopsis = "Ninja story",
                 ImageUrl = "naruto.jpg",
                 Episodes = 220,
-                SelectedGenreIds = new List<int> { 1, 2 }
+                SelectedGenreIds = new List<int> { 1, 2 } // 1 is kept, 2 is new, 3 is removed
             };
             Anime anime = new Anime
             {
@@ -353,7 +353,13 @@
                 ImageUrl = "naruto.jpg",
                 Episodes = 220
             };
-            // Setup the mock to return the anime details
+            // Existing genres: 1 (kept), 3 (should be hard deleted)
+            List<AnimeGenre> allGenres = new List<AnimeGenre>
+            {
+                new AnimeGenre { AnimeId = animeId, GenreId = 1, IsDeleted = false },
+                new AnimeGenre { AnimeId = animeId, GenreId = 3, IsDeleted = false }
+            };
+
             this.animeRepositoryMock
                 .Setup(r => r.GetByIdAsync(animeId))
                 .ReturnsAsync(anime);
@@ -362,26 +368,29 @@
                 .ReturnsAsync(true)
                 .Verifiable();
 
-            List<AnimeGenre> allGenres = new List<AnimeGenre>
-            {
-                new AnimeGenre { AnimeId = animeId, GenreId = 1, IsDeleted = false },
-                new AnimeGenre { AnimeId = animeId, GenreId = 3, IsDeleted = false }
-            };
-            // Setup the mock to return the existing genres for the anime
             this.animeGenreRepositoryMock
                 .Setup(r => r.GetByAnimeIdAsync(animeId, true))
-                .ReturnsAsync(allGenres);
+                .ReturnsAsync(allGenres);       
+
+            // Expect hard delete for genreId 3
             this.animeGenreRepositoryMock
-                .Setup(r => r.UpdateAsync(It.IsAny<AnimeGenre>()))
-                .ReturnsAsync(true);
+                .Setup(r => r.HardDeleteAsync(It.Is<AnimeGenre>(ag => ag.GenreId == 3)))
+                .ReturnsAsync(true)
+                .Verifiable();
+
+            // Expect add for genreId 2 (new)
             this.animeGenreRepositoryMock
-                .Setup(r => r.AddAsync(It.IsAny<AnimeGenre>()))
-                .Returns(Task.CompletedTask);
+                .Setup(r => r.AddAsync(It.Is<AnimeGenre>(ag => ag.GenreId == 2)))
+                .Returns(Task.CompletedTask)
+                .Verifiable();
+
+            // No update or delete for genreId 1 (kept)
 
             bool result = await this.animeService.EditAnimeAsync(inputModel);
-            // Assert that the result is true and the anime and genres were updated
+
             Assert.IsTrue(result);
             this.animeRepositoryMock.Verify();
+            this.animeGenreRepositoryMock.Verify();
         }
 
         // GetAnimeDetailsForDeleteByIdAsync
