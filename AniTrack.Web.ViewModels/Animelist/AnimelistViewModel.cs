@@ -1,7 +1,6 @@
-﻿using AniTrack.Data.Models;
-
-namespace AniTrack.Web.ViewModels.Animelist
+﻿namespace AniTrack.Web.ViewModels.Animelist
 {
+    using AniTrack.Data.Models;
     public class AnimelistViewModel
     {
         public string AnimeId { get; set; } = null!;

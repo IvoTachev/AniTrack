@@ -64,7 +64,7 @@
             try
             {
                 await this.animeService.AddAnimeAsync(inputModel);
-
+                TempData[SuccessMessageKey] = AnimeAddSuccessMessage;
                 return this.RedirectToAction(nameof(Index));
             }
             catch (Exception ex)

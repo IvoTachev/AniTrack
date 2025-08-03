@@ -251,7 +251,7 @@
                     };
                     await this.animeGenreRepository.AddAsync(newAnimeGenre);
                 }
-                else if (ag.IsDeleted)
+                else if (ag.IsDeleted && !ag.Genre.IsDeleted)
                 {
                     ag.IsDeleted = false;
                     await this.animeGenreRepository.UpdateAsync(ag);
@@ -357,8 +357,12 @@
 
             foreach (AnimeGenre ag in relatedGenres)
             {
-                ag.IsDeleted = false;
-                await this.animeGenreRepository.UpdateAsync(ag);
+                // If the Genre is not soft-deleted, restore the AnimeGenre entry
+                if (!ag.Genre.IsDeleted)
+                {
+                    ag.IsDeleted = false;
+                    await this.animeGenreRepository.UpdateAsync(ag);
+                }
             }
 
             await this.animeRepository.UpdateAsync(animeForRestore);

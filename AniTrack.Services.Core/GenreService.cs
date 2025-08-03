@@ -14,6 +14,24 @@
         {
             this.genreRepository = genreRepository;
         }
+
+        public async Task<bool> AddGenreAsync(string genreName)
+        {
+            Genre? existingGenre = await this.genreRepository.GetByNameAsync(genreName);
+
+            if (existingGenre != null)
+            {
+                return false; // Genre already exists
+            }
+
+            Genre genre = new Genre
+            {
+                Name = genreName
+            };
+            await this.genreRepository.AddAsync(genre);
+            return true; // Genre added successfully
+        }
+
         public async Task<GenreViewModel> GetAnimesDetailsByGenreNameAsync(string genreName)
         {
             GenreViewModel genreViewModel = null!;

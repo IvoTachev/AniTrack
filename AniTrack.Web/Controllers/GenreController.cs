@@ -1,6 +1,7 @@
 ﻿namespace AniTrack.Web.Controllers
 {
     using AniTrack.Services.Core.Interfaces;
+    using AniTrack.Web.ViewModels.Genre;
     using AniTrack.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,45 @@
                 logger.LogError(ex, $"Error retrieving animes for genre: {genreName}");
                 TempData[ErrorMessageKey] = GenreAnimesRetrieveErrorMessage;
                 return this.RedirectToAction(nameof(Index));
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        [Route("Genre/Add")]
+        [HttpGet]
+
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("Genre/Add")]
+        [HttpPost]
+
+        public async Task<IActionResult> Add(AddGenreFormModel inputModel)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                return this.View(inputModel);
+            }
+
+            try
+            {
+                bool result = await this.genreService.AddGenreAsync(inputModel.Name);
+                if (result == false)
+                {
+                    TempData[ErrorMessageKey] = GenreAlreadyExistsErrorMessage;
+                    return this.View(inputModel);
+                }
+
+                TempData[SuccessMessageKey] = GenreAddSuccessMessage;
+                return RedirectToAction("Search", "Anime", new { searchTerm = "" });
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while adding a genre.");
+                TempData[ErrorMessageKey] = GenreAddErrorMessage;
+                return this.View(inputModel);
             }
         }
     }
