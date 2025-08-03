@@ -60,6 +60,22 @@
                 TotalPages = totalPages
             };
         }
+
+        public async Task<AddAnimeFormModel> GetAddAnimeViewModelAsync()
+        {
+            List<Genre> genres = await this.genreRepository
+                .GetAllAttached()
+                .AsNoTracking()
+                .ToListAsync();
+
+            AddAnimeFormModel addAnimeModel = new AddAnimeFormModel()
+            {
+                AvailableGenres = genres
+            };
+
+            return addAnimeModel;
+
+        }
         public async Task AddAnimeAsync(AddAnimeFormModel inputModel)
         {
             Anime newAnime = new Anime
@@ -153,6 +169,11 @@
             bool isIdValid = int.TryParse(id, out int animeId);
             if (isIdValid)
             {
+                List<Genre> genres = await this.genreRepository
+                .GetAllAttached()
+                .AsNoTracking()
+                .ToListAsync();
+
                 animeDetails = await this.animeRepository
                     .GetAllAttached()
                     .AsNoTracking()
@@ -168,9 +189,11 @@
                         Synopsis = a.Synopsis,
                         ImageUrl = a.ImageUrl,
                         Episodes = a.Episodes,
+                        AvailableGenres = genres,
                         SelectedGenreIds = a.AnimeGenres
                                   .Select(ag => ag.GenreId)
                                   .ToList()
+                                  
                     })
                     .SingleOrDefaultAsync();
             }

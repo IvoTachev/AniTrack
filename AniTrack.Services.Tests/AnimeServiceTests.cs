@@ -271,6 +271,10 @@
             this.animeRepositoryMock
                 .Setup(r => r.GetAllAttached())
                 .Returns(animeQueryable);
+            // Setup the mock to return all genres
+            this.genreRepositoryMock
+                .Setup(r => r.GetAllAttached())
+                .Returns(new List<Genre> { new Genre { Id = 1} }.BuildMock());
 
             EditAnimeFormModel? result = await this.animeService.GetAnimeDetailsByIdAsync(animeId.ToString());
 

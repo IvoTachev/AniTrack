@@ -4,6 +4,7 @@
     using static AniTrack.Web.ViewModels.ValidationMessages.Anime;
     using static Common.EntityConstants.Anime;
     using System.Collections.Generic;
+    using AniTrack.Data.Models;
 
     public class AddAnimeFormModel  
     {
@@ -19,7 +20,9 @@
         [Required(ErrorMessage = EpisodesRequiredMessage)]
         [Range(EpisodesMin, EpisodesMax, ErrorMessage = EpisodesRangeMessage)]
         public int Episodes { get; set; }
-
+        // This property is used to display the genres in the add form.
+        public List<Genre> AvailableGenres { get; set; } = new List<Genre>();
+        // This property is used to selected genres in the add form.
         public List<int> SelectedGenreIds { get; set; } = new List<int>();
 
         [Required(ErrorMessage = AirDateRequiredMessage)]

@@ -39,9 +39,16 @@
 
         [Authorize(Roles = "Admin")]
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
-            return this.View();
+
+            AddAnimeFormModel? addAnimeModel = await this.animeService.GetAddAnimeViewModelAsync();
+            if (addAnimeModel == null)
+            {
+                // Return 404 Not Found
+                return NotFound();
+            }
+            return this.View(addAnimeModel);
         }
 
         [Authorize(Roles = "Admin")]
@@ -58,7 +65,7 @@
             {
                 await this.animeService.AddAnimeAsync(inputModel);
 
-                return this.RedirectToAction(nameof(Details), new { id = inputModel.Id });
+                return this.RedirectToAction(nameof(Index));
             }
             catch (Exception ex)
             {

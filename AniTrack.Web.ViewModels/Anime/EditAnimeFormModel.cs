@@ -4,6 +4,7 @@
     using static AniTrack.Web.ViewModels.ValidationMessages.Anime;
     using static Common.EntityConstants.Anime;
     using System.Collections.Generic;
+    using AniTrack.Data.Models;
 
     public class EditAnimeFormModel
     {
@@ -23,6 +24,8 @@
         // This property is used to display the genres in the edit form.
         // The user chooses from a checklist, no need of validation here.
         public List<int> SelectedGenreIds { get; set; } = new List<int>();
+        // This property is used to display the available genres in the edit form.
+        public List<Genre> AvailableGenres { get; set; } = new List<Genre>();
 
         [Required(ErrorMessage = AirDateRequiredMessage)]
         public string AirDate { get; set; } = null!;

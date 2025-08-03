@@ -4,9 +4,9 @@
 @{
     ViewData["Title"] = "Add New Anime";
 
-    bool airDateExist = DateOnly.TryParse(Model?.AirDate, out DateOnly airDate);
+    bool airDateExist = DateOnly.TryParse(Model!.AirDate, out DateOnly airDate);
     string airDateString = airDateExist ? airDate.ToString(ApplicationDateFormat) : string.Empty;
-    bool endDateExist = DateOnly.TryParse(Model?.EndDate, out DateOnly endDate);
+    bool endDateExist = DateOnly.TryParse(Model!.EndDate, out DateOnly endDate);
     string endDateString = endDateExist ? endDate.ToString(ApplicationDateFormat) : string.Empty;
 
 }
@@ -55,78 +55,13 @@
         <div class="mb-3">
             <label class="form-label">Genres</label>
             <div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="1" />
-                    <label class="form-check-label">Action</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="2" />
-                    <label class="form-check-label">Adventure</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="3" />
-                    <label class="form-check-label">Avant Garde</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="4" />
-                    <label class="form-check-label">Award Winning</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="5" />
-                    <label class="form-check-label">Boys Love</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="6" />
-                    <label class="form-check-label">Comedy</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="7" />
-                    <label class="form-check-label">Drama</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="8" />
-                    <label class="form-check-label">Fantasy</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="9" />
-                    <label class="form-check-label">Girls Love</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="10" />
-                    <label class="form-check-label">Gourmet</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="11" />
-                    <label class="form-check-label">Horror</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="12" />
-                    <label class="form-check-label">Mystery</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="13" />
-                    <label class="form-check-label">Romance</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="14" />
-                    <label class="form-check-label">Sci-fi</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="15" />
-                    <label class="form-check-label">Slice of Life</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="16" />
-                    <label class="form-check-label">Sports</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="17" />
-                    <label class="form-check-label">Supernatural</label>
-                </div>
-                <div class="form-check form-check-inline">
-                    <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="18" />
-                    <label class="form-check-label">Suspense</label>
-                </div>
+                @foreach (var genre in Model!.AvailableGenres)
+                {
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" name="SelectedGenreIds" value="@genre.Id" />
+                        <label class="form-check-label">@genre.Name</label>
+                    </div>
+                }
             </div>
         </div>
 
