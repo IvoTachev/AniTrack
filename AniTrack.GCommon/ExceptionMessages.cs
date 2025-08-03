@@ -30,6 +30,10 @@
         public const string GenreAlreadyExistsErrorMessage = "This genre already exists.";
         public const string GenreAddErrorMessage = "An error occurred while trying to add the genre. Please try again later.";
         public const string GenreAddSuccessMessage = "The new genre was added successfully";
+        public const string GenreSelectAGenreErrorMessage = "Please select a genre to delete.";
+        public const string GenreInvalidDeleteErrorMessage = "The genre you are trying to delete does not exist.";
+        public const string GenreDeleteSuccessMessage = "The genre was deleted successfully.";
+        public const string GenreDeleteErrorMessage = "An error occurred while trying to delete the genre. Please try again later.";
 
         public const string AdminGetAnimesForRestoreErrorMessage = "An error occurred while trying to retrieve the animes for restore. Please try again later.";
     }

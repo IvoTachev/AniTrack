@@ -3,7 +3,9 @@
     using AniTrack.Data.Models;
     using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core.Interfaces;
+    using AniTrack.Web.ViewModels.Genre;
     using AniTrack.Web.ViewModels.Home;
+    using Microsoft.EntityFrameworkCore;
     using System.Threading.Tasks;
 
     public class GenreService : IGenreService
@@ -32,6 +34,32 @@
             return true; // Genre added successfully
         }
 
+        public async Task<DeleteGenreViewModel?> GetAllGenreDetailsForDeleteAsync(string? selectedGenre)
+        {
+            // Retrieve all genres from the repository
+            List<Genre> allGenres = await this.genreRepository.GetAllAttached().ToListAsync();
+            // Genre can be null or empty, but if it is not null or empty, we need to check if the genre exists in the database.
+            if (!string.IsNullOrEmpty(selectedGenre))
+            { 
+                bool doesGenreExist = allGenres.Any(g => g.Name == selectedGenre);
+                if (!doesGenreExist)
+                {
+                    // If the selected genre does not exist, return null
+                    return null;
+                }
+            }
+            // If the selected genre is either null,empty or exists in the database, we proceed to create the view model.
+            DeleteGenreViewModel deleteGenreViewModel = new DeleteGenreViewModel
+            {
+                Genres = allGenres,
+                SelectedGenreName = selectedGenre
+            };
+
+            return deleteGenreViewModel;
+        }
+
+
+
         public async Task<GenreViewModel> GetAnimesDetailsByGenreNameAsync(string genreName)
         {
             GenreViewModel genreViewModel = null!;
@@ -59,6 +87,17 @@
             };
 
             return genreViewModel;
+        }
+
+        public async Task<bool> DeleteGenreByNameAsync(string selectedGenre)
+        {
+            Genre? genre = await this.genreRepository.GetByNameAsync(selectedGenre);
+            if (genre == null)
+            {
+                return false;
+            }
+            bool result = await this.genreRepository.DeleteAsync(genre);
+            return result;
         }
     }
 }
