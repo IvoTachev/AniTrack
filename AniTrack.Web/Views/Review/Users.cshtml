@@ -17,7 +17,11 @@
         {
             @foreach (var review in Model.Reviews)
             {
-                <div class="card review-card mb-4" style="min-height: 180px;">
+                <div class="card review-card mb-4 position-relative" style="min-height: 180px;">
+                    @if (User.Identity?.IsAuthenticated == true && User.IsInRole("Admin"))
+                    {
+                        <a class="delete-btn-top" href="/Review/Delete/@review.AnimeId/@review.AuthorName">Delete</a>
+                    }
                     <div class="row g-0 align-items-center">
                         <div class="col-md-2 d-flex justify-content-center align-items-center">
                             <a href="/Anime/Details/@review.AnimeId">
@@ -133,5 +137,25 @@
         text-align: center;
         max-width: 600px;
         box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+    }
+    .delete-btn-top {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        color: #fff;
+        background-color: #e74c3c;
+        border: 1px solid #c0392b;
+        border-radius: 6px;
+        padding: 4px 18px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        font-size: 1em;
+        z-index: 2;
+    }
+    .delete-btn-top:hover {
+        background-color: #c0392b;
+        color: #fff;
+        text-decoration: none;
     }
 </style>

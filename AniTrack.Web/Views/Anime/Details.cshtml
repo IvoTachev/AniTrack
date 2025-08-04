@@ -47,6 +47,26 @@
         color: #fff;
         border: 1px solid #c0392b;
     }
+    .delete-btn-top {
+        position: absolute;
+        top: 12px;
+        right: 16px;
+        color: #fff;
+        background-color: #e74c3c;
+        border: 1px solid #c0392b;
+        border-radius: 6px;
+        padding: 4px 18px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: background 0.2s, color 0.2s;
+        font-size: 1em;
+        z-index: 2;
+    }
+    .delete-btn-top:hover {
+        background-color: #c0392b;
+        color: #fff;
+        text-decoration: none;
+    }
 </style>
 
 <div class="anime-details-container details-bg" style="display: flex; gap: 2rem; margin-top: 2rem; color: #f5f5f5;">
@@ -125,7 +145,11 @@
             <h2 style="font-size: 1.2rem; color: #fff; margin-bottom: 0; margin-top: 2rem;">
                 The latest user review
             </h2>
-            <div class="card review-card mt-4">
+            <div class="card review-card mt-4 position-relative">
+                @if (User.Identity?.IsAuthenticated == true && User.IsInRole(AdminRoleName))
+                {
+                    <a class="delete-btn-top" href="/Review/Delete/@Model.ReviewDetails.AnimeId/@Model.ReviewDetails.AuthorName">Delete</a>
+                }
                 <div class="card-body">
                     <h5 class="card-title">
                         @if (User.Identity?.IsAuthenticated == true)

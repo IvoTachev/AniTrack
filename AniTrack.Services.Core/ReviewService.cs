@@ -163,5 +163,47 @@
             //If the review does not exist, return false
             return false;
         }
+
+        public async Task<ReviewDeleteViewModel?> GetReviewDetailsForDeleteAsync(string animeId, string authorName)
+        {
+            AnimeReview? animeReview = await this.reviewRepository
+                .GetAllAttached()
+                .Include(r => r.Anime)
+                .Include(r => r.Author)
+                .FirstOrDefaultAsync(r => r.AnimeId.ToString() == animeId && r.Author.UserName == authorName);
+            ReviewDeleteViewModel? viewModel = null;
+            
+            if (animeReview == null)
+            {
+                return viewModel; 
+            }
+
+            viewModel = new ReviewDeleteViewModel
+            {
+               AnimeId = animeReview.AnimeId.ToString(),
+               AnimeTitle = animeReview.Anime.Title,
+               AuthorName = authorName,
+               ImageUrl = animeReview.Anime.ImageUrl,
+               Content = animeReview.Content,
+               IsRecommended = animeReview.isAnimeRecommended
+            };
+            return viewModel;
+
+        }
+
+        public async Task<bool> DeleteReviewAsync(string animeId, string authorName)
+        {
+            AnimeReview? animeReview = await this.reviewRepository
+                .GetAllAttached()
+                .FirstOrDefaultAsync(r => r.AnimeId.ToString() == animeId && r.Author.UserName == authorName);
+            //Check if the review exists
+            if (animeReview == null)
+            {
+                return false;
+            }
+            //If the review exists, hard delete it to avoid soft delete complications
+            bool result = await this.reviewRepository.HardDeleteAsync(animeReview);
+            return result;
+        }
     }
 }

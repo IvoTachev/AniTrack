@@ -16,5 +16,8 @@
         Task<ReviewEditViewModel?> GetEditFormAsync(string animeId,string authordId);
 
         Task<bool> EditReviewAsync(ReviewEditViewModel inputModel);
+
+        Task<ReviewDeleteViewModel?> GetReviewDetailsForDeleteAsync(string animeId, string authorName);
+        Task<bool> DeleteReviewAsync(string animeId, string authorName);
     }
 }

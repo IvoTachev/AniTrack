@@ -130,7 +130,7 @@
                 }
                 else
                 {
-                    TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
+                    TempData[ErrorMessageKey] = ReviewEditErrorMessage;
                     return this.View(inputModel);
                 }
             }
@@ -140,6 +140,47 @@
                 logger.LogError(ex, $"Error editing review for AnimeId {animeId} by UserId {authorId}");
                 TempData[ErrorMessageKey] = ReviewWriteErrorMessage;
                 return this.RedirectToAction(nameof(Index));
+            }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("Review/Delete/{animeId}/{authorName}")]
+
+        public async Task<IActionResult> Delete(string animeId, string authorName)
+        {
+            ReviewDeleteViewModel? viewModel = await this.reviewService.GetReviewDetailsForDeleteAsync(animeId, authorName);
+            if (viewModel == null)
+            {
+                return NotFound();
+            }
+            return View(viewModel);
+        }
+
+        [HttpPost("Review/Delete/{animeId}/{authorName}")]
+        [Authorize(Roles = "Admin")]
+        [ActionName("Delete")]
+        public async Task<IActionResult> DeleteConfirm(string animeId, string authorName)
+        {
+            try
+            {
+                bool result = await reviewService.DeleteReviewAsync(animeId, authorName);
+                if(!result)
+                {
+                    TempData[ErrorMessageKey] = ReviewDeleteErrorMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+                else
+                {
+                    TempData[SuccessMessageKey] = ReviewDeleteSuccessMessage;
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while trying to delete the review by {AuthorName} for anime with id {AnimeName}.", authorName,animeId);
+                TempData[ErrorMessageKey] = ReviewDeleteErrorMessage;
+                return RedirectToAction(nameof(Index));
+                throw;
             }
         }
     }

@@ -1,0 +1,84 @@
+﻿@model AniTrack.Web.ViewModels.Review.ReviewDeleteViewModel
+
+@{
+    ViewData["Title"] = "Delete Review";
+}
+
+<style>
+    .review-card {
+        background-color: #111;
+        color: #f5f5f5;
+    }
+    .review-author {
+        color: #1565c0;
+        font-weight: bold;
+    }
+    .review-title {
+        color: #2196f3;
+        font-weight: bold;
+    }
+    .review-content {
+        color: #f5f5f5;
+    }
+    .recommend-box {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 0.95em;
+        font-weight: 600;
+        margin-left: 8px;
+    }
+    .recommended {
+        background-color: #2ecc40;
+        color: #fff;
+        border: 1px solid #27ae60;
+    }
+    .not-recommended {
+        background-color: #e74c3c;
+        color: #fff;
+        border: 1px solid #c0392b;  
+    }
+</style>
+
+<div class="container mt-4">
+    <div class="card review-card mb-4" style="min-height: 180px;">
+        <div class="row g-0 align-items-center">
+            <div class="col-md-2 d-flex justify-content-center align-items-center">
+                <a href="/Anime/Details/@Model.AnimeId">
+                    <img src="@Model.ImageUrl" class="img-fluid rounded-start" alt="@Model.AnimeTitle" style="max-height: 150px; max-width: 100px;" />
+                </a>
+            </div>
+            <div class="col-md-10">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <span class="review-author">@Model.AuthorName</span>
+                        @if (Model.IsRecommended)
+                        {
+                            <span class="recommend-box recommended">Recommended</span>
+                        }
+                        else
+                        {
+                            <span class="recommend-box not-recommended">Not Recommended</span>
+                        }
+                    </h5>
+                    <h6 class="card-subtitle mb-2 review-title">
+                        <a href="/Anime/Details/@Model.AnimeId" style="color: inherit; text-decoration: underline;">
+                            @Model.AnimeTitle
+                        </a>
+                    </h6>
+                    <p class="card-text review-content">@Model.Content</p>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer bg-transparent border-0">
+            <form method="post" asp-action="Delete" asp-controller="Review">
+                <input type="hidden" name="animeId" value="@Model.AnimeId" />
+                <input type="hidden" name="authorName" value="@Model.AuthorName" />
+                <div class="d-flex justify-content-center gap-3 mt-3">
+                    <button type="submit" class="btn btn-danger px-4">Confirm</button>
+                    <a class="btn btn-secondary px-4" href="@Url.Action("Index", "Review")">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
