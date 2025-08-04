@@ -84,9 +84,9 @@
         [Route("Genre/Delete")]
         [HttpGet]
 
-        public async Task<IActionResult> Delete(string? SelectedGenreName)
+        public async Task<IActionResult> Delete(string? selectedGenreName)
         {
-            DeleteGenreViewModel? viewModel = await this.genreService.GetAllGenreDetailsForDeleteAsync(SelectedGenreName);
+            DeleteGenreViewModel? viewModel = await this.genreService.GetAllGenreDetailsForDeleteAsync(selectedGenreName);
             if(viewModel == null)
             {
                 // If the view model is null, it means the selected genre does not exist
@@ -104,16 +104,16 @@
         [HttpPost]
         [ActionName("Delete")]
 
-        public async Task<IActionResult> DeleteConfirmed(string? SelectedGenreName)
+        public async Task<IActionResult> DeleteConfirmed(string? selectedGenreName)
         {
-            if(SelectedGenreName == null || SelectedGenreName.Trim() == string.Empty)
+            if(selectedGenreName == null || selectedGenreName.Trim() == string.Empty)
             {
                 TempData[ErrorMessageKey] = GenreSelectAGenreErrorMessage;
                 return RedirectToAction("Delete");
             }
             try
             {
-                bool result = await this.genreService.DeleteGenreByNameAsync(SelectedGenreName);
+                bool result = await this.genreService.DeleteGenreByNameAsync(selectedGenreName);
                 if (result)
                 {
                     TempData[SuccessMessageKey] = GenreDeleteSuccessMessage;
@@ -127,8 +127,59 @@
             }
             catch (Exception ex)
             {
-                logger.LogError(ex, "Error occurred while trying to delete genre: {GenreName}.", SelectedGenreName);
+                logger.LogError(ex, "Error occurred while trying to delete genre: {GenreName}.", selectedGenreName);
                 TempData[ErrorMessageKey] = GenreDeleteErrorMessage;
+                return RedirectToAction("Search", "Anime", new { searchTerm = "" });
+            }
+        }
+        [Authorize(Roles = "Admin")]
+        [Route("Genre/Restore")]
+        [HttpGet]
+
+        public async Task<IActionResult> Restore(string? selectedGenreName)
+        {
+            RestoreGenreViewModel? viewModel = await this.genreService.GetAllGenreDetailsForRestoreAsync(selectedGenreName);
+            if (viewModel == null)
+            {
+                // If the view model is null, it means the selected genre does not exist
+                // return 404
+                return NotFound();
+            }
+            // If the view model is not null, it means either the selected genre exists or nothing was selected.
+            // We can return the view model and the view will display based on a genre is selected or not.
+            return View(viewModel);
+        }
+
+        [Authorize(Roles = "Admin")]
+        [Route("Genre/Restore")]
+        [HttpPost]
+        [ActionName("Restore")]
+
+        public async Task<IActionResult> RestoreConfirmed(string? selectedGenreName)
+        {
+            if (selectedGenreName == null || selectedGenreName.Trim() == string.Empty)
+            {
+                TempData[ErrorMessageKey] = GenreSelectAGenreErrorMessage;
+                return RedirectToAction("Restore");
+            }
+            try
+            {
+                bool result = await this.genreService.RestoreGenreByNameAsync(selectedGenreName);
+                if (result)
+                {
+                    TempData[SuccessMessageKey] = GenreRestoreSuccessMessage;
+                    return RedirectToAction("Search", "Anime", new { searchTerm = "" });
+                }
+                else
+                {
+                    TempData[ErrorMessageKey] = GenreInvalidRestoreErrorMessage;
+                    return RedirectToAction("Restore");
+                }
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "Error occurred while trying to restore genre: {GenreName}.", selectedGenreName);
+                TempData[ErrorMessageKey] = GenreRestoreErrorMessage;
                 return RedirectToAction("Search", "Anime", new { searchTerm = "" });
             }
         }

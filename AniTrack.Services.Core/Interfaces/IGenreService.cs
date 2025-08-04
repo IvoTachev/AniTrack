@@ -13,5 +13,9 @@ namespace AniTrack.Services.Core.Interfaces
 
         Task<bool> DeleteGenreByNameAsync(string selectedGenre);
 
+        Task<RestoreGenreViewModel?> GetAllGenreDetailsForRestoreAsync(string? selectedGenre);
+
+        Task<bool> RestoreGenreByNameAsync(string selectedGenre);
+
     }
 }

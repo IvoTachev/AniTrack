@@ -62,13 +62,15 @@
 
         public async Task<GenreViewModel> GetAnimesDetailsByGenreNameAsync(string genreName)
         {
+            
             GenreViewModel genreViewModel = null!;
             Genre? genre = await this.genreRepository.GetByNameAsync(genreName);
-
+            // If Genre with this name was not found, return null
             if (genre == null)
             {
                 return genreViewModel;
             }
+            // If Genre with this name was found,  proceed to create the view model.
             List<GenreAnimeViewModel> genreAnimeViewModel = genre.AnimesGenre
                 .Select(ag => new GenreAnimeViewModel
             {
@@ -79,24 +81,72 @@
                 EndDate = ag.Anime.EndDate?.ToString("yyyy-MM-dd") ?? "???",
                 Episodes = ag.Anime.Episodes.ToString()
             }).ToList();
-
+            // Create the GenreViewModel with the genre and its associated animes
             genreViewModel = new GenreViewModel
             {
                 Genre = genre,
                 Animes = genreAnimeViewModel
             };
-
+            // If the genre has no associated animes,  still return the genre with an empty list of animes.
             return genreViewModel;
         }
 
         public async Task<bool> DeleteGenreByNameAsync(string selectedGenre)
         {
             Genre? genre = await this.genreRepository.GetByNameAsync(selectedGenre);
+            // If Genre with this name was not found, return false
             if (genre == null)
             {
                 return false;
             }
+            // Try to delete the genre, returns true if successful
             bool result = await this.genreRepository.DeleteAsync(genre);
+            return result;
+        }
+
+        public async Task<RestoreGenreViewModel?> GetAllGenreDetailsForRestoreAsync(string? selectedGenre)
+        {
+            // Retrieve all soft deleted genres from the repository
+            List<Genre> allDeletedGenres = await this.genreRepository
+                .GetAllAttached()
+                .IgnoreQueryFilters()
+                .Where(g => g.IsDeleted)
+                .ToListAsync();
+            // Selected Genre can be null or empty, but if it is not null or empty, we need to check if the genre exists in the database.
+            if (!string.IsNullOrEmpty(selectedGenre))
+            {
+                bool doesGenreExist = allDeletedGenres.Any(g => g.Name == selectedGenre);
+                if (!doesGenreExist)
+                {
+                    // If the selected genre does not exist, return null
+                    return null;
+                }
+            }
+            // If the selected genre is either null,empty or exists in the database, we proceed to create the view model.
+            RestoreGenreViewModel restoreGenreViewModel = new RestoreGenreViewModel
+            {
+                Genres = allDeletedGenres,
+                SelectedGenreName = selectedGenre
+            };
+
+            return restoreGenreViewModel;
+        }
+
+        public async Task<bool> RestoreGenreByNameAsync(string selectedGenre)
+        {
+            Genre? genre = await this.genreRepository
+                .GetAllAttached()
+                .IgnoreQueryFilters()
+                .Where(g => g.IsDeleted && g.Name == selectedGenre)
+                .FirstOrDefaultAsync();
+            // If Genre with this name was not found, return false
+            if (genre == null)
+            {
+                return false;
+            }
+            // If Genre with this name was found, we proceed to restore it.
+            genre.IsDeleted = false;
+            bool result = await this.genreRepository.UpdateAsync(genre);
             return result;
         }
     }

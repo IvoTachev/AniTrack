@@ -34,6 +34,9 @@
         public const string GenreInvalidDeleteErrorMessage = "The genre you are trying to delete does not exist.";
         public const string GenreDeleteSuccessMessage = "The genre was deleted successfully.";
         public const string GenreDeleteErrorMessage = "An error occurred while trying to delete the genre. Please try again later.";
+        public const string GenreRestoreErrorMessage = "An error occurred while trying to restore the genre. Please try again later.";
+        public const string GenreRestoreSuccessMessage = "The genre was restored successfully.";
+        public const string GenreInvalidRestoreErrorMessage = "The genre you are trying to restore does not exist.";
 
         public const string AdminGetAnimesForRestoreErrorMessage = "An error occurred while trying to retrieve the animes for restore. Please try again later.";
     }
