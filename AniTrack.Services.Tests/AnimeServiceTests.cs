@@ -471,10 +471,15 @@
                 .Setup(r => r.UpdateAsync(It.IsAny<Anime>()))
                 .ReturnsAsync(true)
                 .Verifiable();
-
-            List<AnimeGenre> genres = new List<AnimeGenre>
+            var genre = new Genre
             {
-                new AnimeGenre { AnimeId = animeId, GenreId = 1, IsDeleted = true }
+                Id = 1,
+                Name = "Action",
+                IsDeleted = false
+            };
+            List <AnimeGenre> genres = new List<AnimeGenre>
+            {
+                new AnimeGenre { AnimeId = animeId, GenreId = 1, IsDeleted = true, Genre = genre }
             };
             // Setup the mock to return the genres
             this.animeGenreRepositoryMock
