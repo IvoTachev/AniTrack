@@ -1,6 +1,6 @@
 # AniTrack
 
-[Try the app](https://your-app-url.azurewebsites.net](https://anitrack-a9hubvg6ctguh2c0.germanywestcentral-01.azurewebsites.net/))
+[Try the app](https://anitrack-a9hubvg6ctguh2c0.germanywestcentral-01.azurewebsites.net)
 
 AniTrack is a web application for tracking Animes. Built with ASP.NET Core Razor Pages and Entity Framework Core, AniTrack provides a modern, user-friendly interface for anime fans to manage their collections and discover new series.
 
