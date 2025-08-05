@@ -1,13 +1,12 @@
-﻿#nullable disable
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+#nullable disable
 
 namespace AniTrack.Data.Migrations
 {
-    using System;
-    using Microsoft.EntityFrameworkCore.Migrations;
     /// <inheritdoc />
-    public partial class AnimeReviewAddedAndSeeded : Migration
+    public partial class AnimeReviewWithoutSeedingAdded : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,19 +37,6 @@ namespace AniTrack.Data.Migrations
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AnimeReviews",
-                columns: new[] { "AnimeId", "AuthorId", "Content", "CreatedOn", "isAnimeRecommended" },
-                values: new object[,]
-                {
-                    { 1, "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59", "A beautiful exploration of life and death, with stunning visuals and deep themes.", new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7800), true },
-                    { 2, "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59", "A masterpiece of storytelling and character development, with a perfect blend of action and emotion.", new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7806), true },
-                    { 4, "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59", "I found the pacing too slow and the story dragged on unnecessarily.", new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7808), false },
-                    { 2, "ebc3f310-2e0d-4dd4-8493-b144cd98d282", "An epic tale of sacrifice, friendship, and the pursuit of knowledge.", new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc), true },
-                    { 3, "ebc3f310-2e0d-4dd4-8493-b144cd98d282", "A mind-bending journey through time with unforgettable characters.", new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc), true },
-                    { 4, "ebc3f310-2e0d-4dd4-8493-b144cd98d282", "An incredible adventure with complex characters and a rich world.", new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc), true }
                 });
 
             migrationBuilder.CreateIndex(

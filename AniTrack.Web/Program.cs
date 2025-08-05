@@ -42,9 +42,12 @@ namespace AniTrack.Web
 
             builder.Services.AddRepositories(typeof(IAnimeRepository).Assembly);
             builder.Services.AddUserDefinedServices(typeof(IAnimeService).Assembly);
+
             builder.Services.AddTransient<IIdentitySeeder, IdentitySeeder>();
+            builder.Services.AddTransient<IReviewSeeder, ReviewSeeder>();
 
             builder.Services.AddControllersWithViews();
+
 
             var app = builder.Build();
 
@@ -70,6 +73,7 @@ namespace AniTrack.Web
          
 
             app.SeedDefaultIdentity();
+            app.SeedDefaultReviews();
 
             app.UseAuthorization();
 

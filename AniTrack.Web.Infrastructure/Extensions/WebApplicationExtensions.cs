@@ -17,5 +17,17 @@
 
             return app;
         }
+
+        public static IApplicationBuilder SeedDefaultReviews(this IApplicationBuilder app)
+        {
+            using IServiceScope scope = app.ApplicationServices.CreateScope();
+            IServiceProvider serviceProvider = scope.ServiceProvider;
+
+            IReviewSeeder reviewSeeder = serviceProvider.GetRequiredService<IReviewSeeder>();
+
+            reviewSeeder.SeedReviewAsync().GetAwaiter().GetResult();
+
+            return app;
+        }
     }
 }

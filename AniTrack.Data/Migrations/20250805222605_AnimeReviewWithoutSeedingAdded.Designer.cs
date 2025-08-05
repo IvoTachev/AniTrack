@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AniTrack.Data.Migrations
 {
     [DbContext(typeof(AniTrackDbContext))]
-    [Migration("20250729151302_AnimeReviewAddedAndSeeded")]
-    partial class AnimeReviewAddedAndSeeded
+    [Migration("20250805222605_AnimeReviewWithoutSeedingAdded")]
+    partial class AnimeReviewWithoutSeedingAdded
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -423,62 +423,6 @@ namespace AniTrack.Data.Migrations
                     b.HasIndex("AnimeId");
 
                     b.ToTable("AnimeReviews");
-
-                    b.HasData(
-                        new
-                        {
-                            AuthorId = "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59",
-                            AnimeId = 1,
-                            Content = "A beautiful exploration of life and death, with stunning visuals and deep themes.",
-                            CreatedOn = new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7800),
-                            IsDeleted = false,
-                            isAnimeRecommended = true
-                        },
-                        new
-                        {
-                            AuthorId = "ebc3f310-2e0d-4dd4-8493-b144cd98d282",
-                            AnimeId = 2,
-                            Content = "An epic tale of sacrifice, friendship, and the pursuit of knowledge.",
-                            CreatedOn = new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            isAnimeRecommended = true
-                        },
-                        new
-                        {
-                            AuthorId = "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59",
-                            AnimeId = 2,
-                            Content = "A masterpiece of storytelling and character development, with a perfect blend of action and emotion.",
-                            CreatedOn = new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7806),
-                            IsDeleted = false,
-                            isAnimeRecommended = true
-                        },
-                        new
-                        {
-                            AuthorId = "ebc3f310-2e0d-4dd4-8493-b144cd98d282",
-                            AnimeId = 3,
-                            Content = "A mind-bending journey through time with unforgettable characters.",
-                            CreatedOn = new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            isAnimeRecommended = true
-                        },
-                        new
-                        {
-                            AuthorId = "72f4dc29-8a94-4f93-b5bb-b04e0b78eb59",
-                            AnimeId = 4,
-                            Content = "I found the pacing too slow and the story dragged on unnecessarily.",
-                            CreatedOn = new DateTime(2025, 7, 29, 15, 13, 1, 620, DateTimeKind.Utc).AddTicks(7808),
-                            IsDeleted = false,
-                            isAnimeRecommended = false
-                        },
-                        new
-                        {
-                            AuthorId = "ebc3f310-2e0d-4dd4-8493-b144cd98d282",
-                            AnimeId = 4,
-                            Content = "An incredible adventure with complex characters and a rich world.",
-                            CreatedOn = new DateTime(2025, 7, 29, 0, 0, 0, 0, DateTimeKind.Utc),
-                            IsDeleted = false,
-                            isAnimeRecommended = true
-                        });
                 });
 
             modelBuilder.Entity("AniTrack.Data.Models.ApplicationUser", b =>
