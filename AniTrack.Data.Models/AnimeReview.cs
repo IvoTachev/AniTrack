@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace AniTrack.Data.Models
+﻿namespace AniTrack.Data.Models
 {
+    using Microsoft.EntityFrameworkCore;
+
     public class AnimeReview
     {
         [Comment("Unique identifier for the review author")]

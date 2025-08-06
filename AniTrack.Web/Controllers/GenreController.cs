@@ -1,7 +1,6 @@
 ﻿namespace AniTrack.Web.Controllers
 {
     using AniTrack.Services.Core.Interfaces;
-    using AniTrack.Web.ViewModels.Anime;
     using AniTrack.Web.ViewModels.Genre;
     using AniTrack.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;

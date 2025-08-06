@@ -4,7 +4,7 @@
     using AniTrack.Data.Repository.Interface;
     using AniTrack.Services.Core;
     using AniTrack.Web.ViewModels.Anime;
-    using AniTrack.Web.ViewModels.Review;
+
     using Moq;
     using MockQueryable;
     using NUnit.Framework;

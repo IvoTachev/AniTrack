@@ -2,7 +2,6 @@
 {
     using AniTrack.Data.Models;
     using Microsoft.EntityFrameworkCore;
-    using Microsoft.Extensions.Configuration;
     using Microsoft.EntityFrameworkCore.Metadata.Builders;
     using static AniTrack.Common.EntityConstants.AnimeReview;
     public class AnimeReviewConfiguration : IEntityTypeConfiguration<AnimeReview>

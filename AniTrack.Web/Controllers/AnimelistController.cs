@@ -18,6 +18,7 @@
             this.animelistService = animelistService;
             this.logger = logger;
         }
+
         [HttpGet]
         [Route("Animelist/{username?}")]
         public async Task<IActionResult> Index(string? username)

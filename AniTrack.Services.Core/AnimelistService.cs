@@ -1,6 +1,5 @@
 ﻿namespace AniTrack.Services.Core
 {
-    using AniTrack.Data;
     using AniTrack.Services.Core.Interfaces;
     using AniTrack.Web.ViewModels.Animelist;
     using Microsoft.EntityFrameworkCore;

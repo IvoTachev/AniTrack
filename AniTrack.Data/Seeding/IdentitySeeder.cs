@@ -3,7 +3,6 @@
     using AniTrack.Data.Models;
     using AniTrack.Data.Seeding.Interfaces;
     using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using static GCommon.ApplicationConstants;
     public class IdentitySeeder : IIdentitySeeder

@@ -3,7 +3,6 @@
     using AniTrack.Data.Models;
     using AniTrack.Data.Repository.Interface;
     using Microsoft.EntityFrameworkCore;
-    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 

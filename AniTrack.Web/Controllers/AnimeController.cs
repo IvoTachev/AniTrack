@@ -8,8 +8,6 @@
     using static AniTrack.GCommon.ApplicationConstants;
     using static AniTrack.GCommon.ExceptionMessages;
    
-
-
     public class AnimeController : BaseController
     {
 

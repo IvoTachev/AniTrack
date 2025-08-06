@@ -1,6 +1,4 @@
-﻿
-
-namespace AniTrack.Data.Configuration
+﻿namespace AniTrack.Data.Configuration
 {
     using Models;
     using Microsoft.EntityFrameworkCore;

@@ -22,10 +22,12 @@
         [Comment("Indicates whether the anime series is deleted")]
         public bool IsDeleted { get; set; }
 
+
+        // Navigation property for genres
         public ICollection<AnimeGenre> AnimeGenres { get; set; } = new List<AnimeGenre>();
-
+        // Navigation property for user watchlists
         public virtual ICollection<UserAnime> UserWatchlists { get; set; } = new List<UserAnime>();
-
+        // Navigation property for reviews
         public virtual ICollection<AnimeReview> Reviews { get; set; } = new List<AnimeReview>();
     }
 }

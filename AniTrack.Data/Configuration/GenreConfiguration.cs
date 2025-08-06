@@ -1,5 +1,4 @@
-﻿
-namespace AniTrack.Data.Configuration
+﻿namespace AniTrack.Data.Configuration
 {
     using AniTrack.Data.Models;
     using Microsoft.EntityFrameworkCore;
@@ -17,8 +16,6 @@ namespace AniTrack.Data.Configuration
                 .Property(g => g.Name)
                 .IsRequired()
                 .HasMaxLength(GenreNameMaxLength);
-            // Seeding initial data for genres
-            entity.HasData(SeedGenre());
             // Setting up the IsDeleted property for soft deletion
             entity
                 .Property(g => g.IsDeleted)
@@ -27,6 +24,8 @@ namespace AniTrack.Data.Configuration
             // Apply global query filter to exclude soft-deleted records
             entity
                 .HasQueryFilter(g => g.IsDeleted == false);
+            // Seeding initial data for genres
+            entity.HasData(SeedGenre());
         }
 
         public List<Genre> SeedGenre()
