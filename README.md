@@ -21,3 +21,7 @@ AniTrack is a web application for tracking Animes. Built with ASP.NET Core Razor
 - ASP.NET Core Identity
 - Moq & NUnit (unit testing)
 - Azure App Service (deployment)
+
+## Running the project locally
+
+You will need to create a test admin user and test user for the seed methods before running the app. The seed methods get the information from secrets.json.

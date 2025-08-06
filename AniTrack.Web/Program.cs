@@ -70,8 +70,6 @@ namespace AniTrack.Web
 
             app.UseRouting();
 
-         
-
             app.SeedDefaultIdentity();
             app.SeedDefaultReviews();
 
