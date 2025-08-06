@@ -223,19 +223,38 @@
                 .Setup(r => r.GetAllAttached())
                 .Returns(animeQueryable);
 
-            AnimeReview review = new AnimeReview
+            // Setup reviews
+            List<AnimeReview> reviews = new List<AnimeReview>
             {
-                AnimeId = animeId,
-                Anime = anime,
-                Author = new ApplicationUser { UserName = "user1" },
-                Content = "Great anime!",
-                isAnimeRecommended = true
+                new AnimeReview
+                {
+                    AnimeId = animeId,
+                    Anime = anime,
+                    Author = new ApplicationUser { UserName = "user1" },
+                    Content = "Great anime!",
+                    isAnimeRecommended = true
+                },
+                new AnimeReview
+                {
+                    AnimeId = animeId,
+                    Anime = anime,
+                    Author = new ApplicationUser { UserName = "user2" },
+                    Content = "Not my favorite.",
+                    isAnimeRecommended = false
+                }
             };
+
+            // Setup the mock to return the first review for details
             this.reviewRepositoryMock
                 .Setup(r => r.GetAnimeReviewByAnimeIdAsync(animeIdStr))
-                .ReturnsAsync(review);
+                .ReturnsAsync(reviews[0]);
 
-            AnimeDetailsWithReviewViewModel result = await this.animeService.GetAnimeDetailsWithReviewViewModelAsync(animeIdStr);
+            // Setup the mock to return all reviews for the anime
+            this.reviewRepositoryMock
+                .Setup(r => r.GetAllAttached())
+                .Returns(reviews.BuildMock());
+
+            var result = await this.animeService.GetAnimeDetailsWithReviewViewModelAsync(animeIdStr);
 
             // Assert that the result is not null and contains the expected details and review
             Assert.IsNotNull(result);
@@ -244,6 +263,12 @@
             Assert.That(result.ReviewDetails, Is.Not.Null);
             Assert.That(result.ReviewDetails.Content, Is.EqualTo("Great anime!"));
             Assert.That(result.ReviewDetails.AuthorName, Is.EqualTo("user1"));
+
+            // Assert new properties
+            Assert.That(result.AllReviews, Is.Not.Null);
+            Assert.That(result.AllReviews.Count, Is.EqualTo(2));
+            Assert.That(result.TotalReviewsCount, Is.EqualTo(2));
+            Assert.That(result.RecommendedReviewsCount, Is.EqualTo(1));
         }
 
         // GetAnimeDetailsByIdAsync

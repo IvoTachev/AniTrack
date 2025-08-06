@@ -104,6 +104,7 @@
             <strong>Episodes:</strong>
             @Model.AnimeDetails.Episodes
         </div>
+        <!-- Genres section (left column) -->
         <div style="width: 100%; padding: 0.75rem 1rem; border-radius: 6px; border: 1.5px solid #bbb;">
             <strong>Genres:</strong>
             @if (Model.AnimeDetails.Genres != null && Model.AnimeDetails.Genres.Any())
@@ -120,6 +121,19 @@
                 <span>N/A</span>
             }
         </div>
+
+        <!-- Pie Chart for % Recommended Reviews (left column, below genres) -->
+        @if (Model.ReviewDetails != null && !string.IsNullOrWhiteSpace(Model.ReviewDetails.Content))
+        {
+            <div style="width: 100%; margin-top: 1.5rem; text-align: center;">
+                <div style="font-weight: bold; color: #fff; margin-bottom: 0.5rem;">User Recommendations:</div>
+                <canvas id="reviewPieChart" width="160" height="160"></canvas>
+                <div style="text-align:center; font-size: 0.95em;">
+                    <span style="color:#2ecc40;font-weight:bold;">Recommended</span> /
+                    <span style="color:#e74c3c;font-weight:bold;">Not Recommended</span>
+                </div>
+            </div>
+        }
     </div>
 
     <!-- Right Column: Title + Synopsis -->
@@ -185,3 +199,17 @@
         }
     </div>
 </div>
+
+@section Scripts {
+    <script src="~/js/reviewPieChart.js"></script>
+    <script>
+        const canvas = document.getElementById('reviewPieChart');
+        if (canvas) {
+            drawReviewPieChart(
+                'reviewPieChart',
+                @(Model.TotalReviewsCount),
+                @(Model.RecommendedReviewsCount)
+            );
+        }
+    </script>
+}

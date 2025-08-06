@@ -364,3 +364,4 @@ FodyWeavers.xsd
 
 #Test reports
 coveragereport/
+coverage-report/

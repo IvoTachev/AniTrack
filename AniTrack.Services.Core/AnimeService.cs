@@ -142,7 +142,12 @@
            AnimeDetailsViewModel? animeDetails = await GetAnimeDetailsAsync(id);
            AnimeReview? review = await reviewRepository.GetAnimeReviewByAnimeIdAsync(id);
            AnimeReviewViewModel? reviewDetails = null;
-           if (review != null)
+           List<AnimeReview> allReviews = await reviewRepository
+                .GetAllAttached()
+                .AsNoTracking()
+                .Where(r => r.AnimeId.ToString() == id)
+                .ToListAsync();
+            if (review != null)
            {
                 reviewDetails = new AnimeReviewViewModel()
                 {
@@ -159,7 +164,10 @@
            return new AnimeDetailsWithReviewViewModel()
            {
                AnimeDetails = animeDetails,
-               ReviewDetails = reviewDetails
+               ReviewDetails = reviewDetails,
+               AllReviews = allReviews,
+               TotalReviewsCount = allReviews.Count(),
+               RecommendedReviewsCount = allReviews.Count(r => r.isAnimeRecommended)
            };
         }
 
