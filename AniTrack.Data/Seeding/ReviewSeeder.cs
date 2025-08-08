@@ -37,7 +37,7 @@
                 // Positive Review for Fullmetal Alchemist: Brotherhood by TestAdmin. Posted on Midnight
                 new AnimeReview
                 {
-                    AuthorId = this.configuration["UserSeed:TestAdmin:Id"] ?? "admin-user-id";
+                    AuthorId = this.configuration["UserSeed:TestAdmin:Id"] ?? "admin-user-id",
                     AnimeId = 2,
                     Content = "An epic tale of sacrifice, friendship, and the pursuit of knowledge.",
                     IsDeleted = false,
@@ -57,7 +57,7 @@
                 // Positive Review for Steins;Gate by TestAdmin. Posted on Midnight
                 new AnimeReview
                 {
-                    AuthorId = this.configuration["UserSeed:TestAdmin:Id"] ?? "admin-user-id";
+                    AuthorId = this.configuration["UserSeed:TestAdmin:Id"] ?? "admin-user-id",
                     AnimeId = 3,
                     Content = "A mind-bending journey through time with unforgettable characters.",
                     IsDeleted = false,
